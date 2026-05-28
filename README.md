@@ -26,6 +26,23 @@ claude
 
 `/dyalog:bugfix <issue>` investigates a bug end-to-end. `/dyalog:crev <issue-or-path>` reviews work at any stage. Everything else (planning, issue creation, TDD cycles, PR opening) is ordinary conversation with Claude. See `.devcontainer/kit/PROCESS.md` for the walkthrough.
 
+## Windows users
+
+The dev container runs on Windows through Docker Desktop's WSL2 backend. The setup that causes the fewest sharp edges:
+
+1. Install Docker Desktop and enable the WSL2 backend (Settings → General → "Use the WSL 2 based engine"). Under Settings → Resources → WSL integration, enable the WSL2 distribution you intend to use.
+2. Install VS Code with the "Dev Containers" and "WSL" extensions.
+3. Clone this repository inside the WSL2 filesystem, not under `/mnt/c/`. From a WSL2 shell: `cd ~ && git clone https://github.com/dyalog-labs/agent-dev-container.git`. Bind-mounting from `/mnt/c/` over 9P has order-of-magnitude worse I/O and does not preserve Unix permission bits, which breaks the executable hook scripts.
+4. Open the folder from inside WSL2: run `code .` in the WSL2 shell, then "Reopen in Container".
+
+For `GH_TOKEN` (see [GitHub authentication](#github-authentication) below), export it in the WSL2 shell's startup file (`~/.zshrc` or `~/.bashrc` inside the distro), not as a Windows environment variable. VS Code launched from WSL2 inherits the WSL2 environment, and `remoteEnv` in `devcontainer.json` forwards that environment into the container.
+
+If you must clone under `/mnt/c/` (for a Windows-side editor, say) and open through Docker Desktop without WSL2 integration, configure git globally before cloning so shell scripts under `.claude/hooks/` and `.claude/statusline/` keep their LF line endings; otherwise they fail silently inside the container:
+
+```
+git config --global core.autocrlf input
+```
+
 ## GitHub authentication
 
 The kit invokes `gh` for issue context inside `/dyalog:bugfix` and `/dyalog:crev`, for PR diffs and checks during review, and for opening pull requests at the end of a cycle. Inside the container, `gh` reads `GH_TOKEN` from the environment; `.devcontainer/devcontainer.json` forwards `GH_TOKEN` from the host into the container via `remoteEnv`.
