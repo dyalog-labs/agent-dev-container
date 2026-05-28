@@ -1,7 +1,7 @@
 ---
 description: Investigate a bug and write docs/bugs/<ID>.md, repro, RCA, fix outline. NO code changes.
 argument-hint: <github-issue-number>
-allowed-tools: Read, Glob, Grep, Bash(gh issue view:*), Bash(git log:*), Bash(git blame:*), Bash(git show:*), Bash(git diff:*), Bash(rg:*), Bash(mkdir:*), Bash(ls:*), Bash(cat:*), Bash(npm test:*), Bash(npm run:*), Bash(pnpm test:*), Bash(pnpm run:*), Bash(yarn test:*), Bash(pytest:*), Bash(python:*), Bash(python -m pytest:*), Bash(node:*), Bash(go test:*), Bash(go run:*), Bash(cargo test:*), Bash(cargo run:*), Bash(curl:*), Write
+allowed-tools: Read, Edit, Glob, Grep, Bash(gh issue view:*), Bash(git log:*), Bash(git blame:*), Bash(git show:*), Bash(git diff:*), Bash(git status:*), Bash(git switch:*), Bash(git add:*), Bash(git commit:*), Bash(rg:*), Bash(mkdir:*), Bash(ls:*), Bash(cat:*), Bash(npm test:*), Bash(npm run:*), Bash(pnpm test:*), Bash(pnpm run:*), Bash(yarn test:*), Bash(pytest:*), Bash(python:*), Bash(python -m pytest:*), Bash(node:*), Bash(go test:*), Bash(go run:*), Bash(cargo test:*), Bash(cargo run:*), Bash(curl:*), Write
 ---
 
 # /bugfix - Fix a bug by GitHub issue ID
@@ -24,7 +24,9 @@ Fix the bug described in GitHub issue $ARGUMENTS.
    - Root cause explanation (which file, which function, why it fails)
    - Fix proposal(s) with trade-offs if applicable
 
-6. **Stop for review**: Present a summary to the user covering:
+6. **Commit the bug document**: Stage only `docs/bugs/$ARGUMENTS.md` and commit. Subject: `Investigate #$ARGUMENTS` (imperative, under 72 chars, no trailing full stop). Body: one short paragraph stating the root cause finding. Trailer: `Refs #$ARGUMENTS`. Do not stage reproducer scripts or regression tests in this commit; those belong to the implementation cycle.
+
+7. **Stop for review**: Present a summary to the user covering:
    - The reproducer and Dyalog reference output, if relevant
    - The regression tests written
    - The root cause finding

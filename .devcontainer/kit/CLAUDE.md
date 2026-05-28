@@ -2,9 +2,24 @@
 
 This file is project memory. It applies to every session, every command, every subagent. Keep it short; long memory files lose effectiveness in long sessions.
 
-## Branch naming
+## Per-Issue Workflow
 
-Branches are named `<issue-id>-<slug>` where `<slug>` is derived from the GitHub issue title (lowercase, non-alphanumeric runs to hyphens, trimmed, capped at 50 chars). Claude creates branches following this convention when you start work on an issue. Do not deviate.
+We operate a red/green TDD workflow. 
+
+1. Create branch: {issue-id}-{slug-from-title}
+2. Write tests defining expected behaviour - show that they fail (RED)
+3. Create/update docs/prs/{issue-id}.md with test details
+4. STOP → Present tests for review → Wait for approval
+5. Commit approved tests
+6. Implement until tests pass (GREEN)
+7. Run full test suite (no regressions)
+8. Run linters and formatters
+9. Update docs/prs/{issue-id}.md with implementation details
+10. STOP → Present implementation for review → Wait for approval
+11. Commit implementation
+12. Create upstream PR
+
+Note: Always create/update the PR doc in docs/prs/{issue-id}.md when stopping for ANY review.
 
 ## Writing style
 

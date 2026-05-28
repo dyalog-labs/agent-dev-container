@@ -55,7 +55,7 @@ The VS Code extensions list in `devcontainer.json` is TypeScript-leaning (`eslin
 ## Environment variables
 
 - `TZ` (default `Europe/London`): overridden by host `TZ` if set.
-- `GH_TOKEN`: needed whenever the workflow uses `gh` (reading issues for `/dyalog:bugfix`, opening PRs at the end of a feature, fetching issue or PR context inside `/dyalog:crev`). Export on the host before opening the container, or `gh` will prompt for browser-based auth on first use.
+- `GH_TOKEN`: forwarded from the host via `remoteEnv` for `gh`. See "GitHub authentication" in the top-level [`README.md`](../README.md) for setup and fine-grained-token guidance.
 
 ## Architecture support
 
