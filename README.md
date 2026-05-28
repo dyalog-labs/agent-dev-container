@@ -26,6 +26,46 @@ claude
 
 `/dyalog:bugfix <issue>` investigates a bug end-to-end. `/dyalog:crev <issue-or-path>` reviews work at any stage. Everything else (planning, issue creation, TDD cycles, PR opening) is ordinary conversation with Claude. See `.devcontainer/kit/PROCESS.md` for the walkthrough.
 
+## GitHub authentication
+
+The kit invokes `gh` for issue context inside `/dyalog:bugfix` and `/dyalog:crev`, for PR diffs and checks during review, and for opening pull requests at the end of a cycle. Inside the container, `gh` reads `GH_TOKEN` from the environment; `.devcontainer/devcontainer.json` forwards `GH_TOKEN` from the host into the container via `remoteEnv`.
+
+Export the token in your host shell's startup file before opening the container:
+
+```sh
+export GH_TOKEN="github_pat_..."
+```
+
+A new terminal (or `source ~/.zshrc`) followed by "Reopen in Container" is enough. `remoteEnv` is read once at container start, so if the container is already running with no token or an old one, rebuild to pick up the new value.
+
+Verify inside the container:
+
+```
+gh auth status
+gh repo view
+```
+
+If `GH_TOKEN` is unset, `gh` falls back to browser-based device-code auth on first use. That works, but the resulting credentials live in `~/.config/gh/` rather than on a persistent volume, so they vanish whenever the container is rebuilt, and the token has broader scope than the steps below require.
+
+### Fine-grained tokens, scoped to one repository
+
+Prefer a fine-grained personal access token over a classic one. A classic `repo`-scoped token grants access to every repository the account can see; a fine-grained token can be restricted to a single repository and to the minimum permissions the kit actually needs.
+
+Create one at Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token. The relevant choices:
+
+- Repository access: "Only select repositories" → pick the project this container will work on.
+- Repository permissions:
+  - Contents (read and write): push commits, create branches.
+  - Issues (read and write): read issue bodies for `/dyalog:bugfix` and `/dyalog:crev`; create or comment on issues from conversation.
+  - Pull requests (read and write): open PRs, read diffs and comments.
+  - Actions (read): only if you use `gh pr checks` or `gh run view`.
+  - Metadata (read): required by GitHub, added automatically.
+- Expiry: the shortest period you can tolerate. 30 to 90 days is reasonable.
+
+If the target repository is owned by an organisation that enforces SAML SSO, authorise the token for the org after creation (token page → Configure SSO → authorise the org). Until that step, `gh` returns a 403 with a SAML hint.
+
+A token restricted to one repository means one token per project. For multiple repositories in the same container, either rotate `GH_TOKEN` between sessions or broaden the token to a small, trusted set of repositories. Avoid classic tokens for shared or workshop machines: a single leak exposes every repository the account can see.
+
 ## Layout
 
 ```
