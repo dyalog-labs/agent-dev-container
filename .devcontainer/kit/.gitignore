@@ -1,0 +1,42 @@
+# Claude Code local state
+.claude/audit.log
+CLAUDE.local.md
+
+# Editor and OS noise
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# Common temp dirs that show up regardless of language
+tmp/
+.cache/
+
+# Node, here because the dev container has Node and you may add it later
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Go
+*.exe
+*.test
+*.out
+
+# Rust
+target/
+
+# Environment files (covered by the protect-paths hook too, but belt and braces)
+.env
+.env.local
+.env.*.local
