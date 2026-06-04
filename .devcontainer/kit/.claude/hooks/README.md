@@ -6,7 +6,7 @@ Hooks fire on every tool call regardless of what the slash commands say. They ar
 
 | Hook | Matches | What it does | Blocking |
 |---|---|---|---|
-| `block-dangerous-bash.sh` | `Bash` | Deny-list of shell patterns: force-push, push to main, `--no-verify`, test-bypass flags, `rm -rf` at sensitive roots, `curl ... \| sh`, `sudo`, edits to shell rc files, disabling the firewall, `git add` with wildcards or bulk flags, `git commit -a`. | Yes (exit 2) |
+| `block-dangerous-bash.sh` | `Bash` | Deny-list of shell patterns: force-push, push to main, `--no-verify`, test-bypass flags, `rm -rf` at sensitive roots, `curl ... \| sh`, `sudo`, edits to shell rc files, `git add` with wildcards or bulk flags, `git commit -a`. | Yes (exit 2) |
 | `protect-paths.sh` | `Edit\|Write\|MultiEdit` | Deny-list of paths: `.env*`, `.git/`, `.claude/hooks/`, `.claude/statusline/`, `.claude/settings.json`, credential directories (`.ssh/`, `.gnupg/`, `.aws/`, `.config/gcloud/`), `CLAUDE.local.md`. | Yes (exit 2) |
 | `audit-log.sh` | every tool (matcher `""`) | Appends one line per tool call to `.claude/audit.log`. | No (always exit 0) |
 

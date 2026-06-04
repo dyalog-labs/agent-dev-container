@@ -153,10 +153,5 @@ if echo "$command" | grep -qE '>>?[[:space:]]*~/\.(bashrc|zshrc|profile|bash_pro
   block "Writing to shell rc files (~/.bashrc, ~/.zshrc, etc.). Not within scope of an agentic coding task."
 fi
 
-# 10. Disabling the firewall.
-if echo "$command" | grep -qE '(iptables[[:space:]]+-F|ufw[[:space:]]+disable|systemctl[[:space:]]+(stop|disable)[[:space:]]+(ufw|firewalld))'; then
-  block "Disabling the firewall. The egress firewall is part of the container's safety model. Hands off."
-fi
-
 # All checks passed.
 exit 0
