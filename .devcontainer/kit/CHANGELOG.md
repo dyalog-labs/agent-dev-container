@@ -2,6 +2,13 @@
 
 All notable changes to the kit are recorded here. Versions follow [Semantic Versioning](https://semver.org/): MAJOR for breaking changes to the workflow or command contracts, MINOR for new commands or hooks, PATCH for fixes that don't change behaviour. While the kit is on `0.x`, expect breaking changes between minor versions.
 
+## [0.6.0] - 2026-06-04
+
+### Removed
+
+- The firewall guard in `block-dangerous-bash.sh` (the rule blocking `iptables -F`, `ufw disable`, and `systemctl stop/disable` of `ufw`/`firewalld`). The container configures no egress firewall, so the guard protected nothing and its message described a safety mechanism that is not present. The hook's other deny-list patterns are unchanged.
+- `claude-code-workshop-program.md`, the one-day workshop curriculum, from the repo root, together with its references in the top-level `README.md`.
+
 ## [0.5.0] - 2026-05-28
 
 ### Changed

@@ -1,6 +1,6 @@
 # agent-dev-container
 
-A reproducible dev container, a slim Claude Code configuration, and a one-day workshop curriculum for using Claude Code (and other AI coding agents) safely on day-to-day software work.
+A reproducible dev container and a slim Claude Code configuration for using Claude Code (and other AI coding agents) safely on day-to-day software work.
 
 **Version:** see [`VERSION`](VERSION). **Licence:** MIT.
 
@@ -8,7 +8,6 @@ A reproducible dev container, a slim Claude Code configuration, and a one-day wo
 
 - **`.devcontainer/`** builds a Docker image with Node 20, .NET 8, Go 1.24, Python 3, Dyalog APL 20, LSP servers for all of them, the GitHub CLI, `jq`, `git-delta`, oh-my-zsh, and the Claude Code CLI. Two named volumes preserve Claude Code's user-level config and shell history across rebuilds.
 - **`.devcontainer/kit/`** is the master copy of the Claude Code configuration ("the kit") that gets baked into the image at `/opt/agent-dev-container/`. It contains the project conventions (`CLAUDE.md`), the day-to-day workflow (`PROCESS.md`), and a `.claude/` tree with hooks, skills, a status line, an audit log, and two slash commands (`/dyalog:bugfix`, `/dyalog:crev`).
-- **`claude-code-workshop-program.md`** is the one-day curriculum that walks attendees through the layers (container → permissions → CLAUDE.md → skills → subagents → hooks) and then puts them through a constrained TDD loop using the kit.
 
 ## Quick start
 
@@ -90,7 +89,6 @@ A token restricted to one repository means one token per project. For multiple r
 ├── README.md                              this file
 ├── VERSION                                semver version of the kit baked into the image
 ├── LICENSE                                MIT
-├── claude-code-workshop-program.md        one-day workshop curriculum (delete if not running the workshop)
 ├── .gitignore
 └── .devcontainer/
     ├── README.md                          dev container reference: mounts, env vars, troubleshooting
@@ -100,7 +98,7 @@ A token restricted to one repository means one token per project. For multiple r
     └── kit/                               master copy of CLAUDE.md, PROCESS.md, .claude/, baked into the image
 ```
 
-The kit is held in `.devcontainer/kit/` rather than at the repo root because it ships baked into the dev container image. The repo's root is the host directory for the image and curriculum, not a working project.
+The kit is held in `.devcontainer/kit/` rather than at the repo root because it ships baked into the dev container image. The repo's root is the host directory for the image, not a working project.
 
 ## Working on the kit itself
 
