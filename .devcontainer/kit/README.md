@@ -2,7 +2,7 @@
 
 A small, opinionated configuration that drops into any project to give Claude Code:
 
-- Hooks that block the common foot-guns (force-push, `--no-verify`, `git add` wildcards, edits to `.env`, `.git/`, and the kit's own safety files).
+- Hooks that block the common foot-guns (force-push, `--no-verify`, `git add` wildcards, edits to `.env`, `.git/`, and the kit's own safety files) and that stop reading secret files such as `.env` and private keys.
 - An audit log of every tool call.
 - A status line showing the git branch, context-window usage, and headroom before auto-compact.
 - Skills for searching Dyalog APL documentation and executing APL snippets.
@@ -49,8 +49,9 @@ At any review point: `/dyalog:crev <issue-number>` or `/dyalog:crev docs/plans/<
     │   └── dyalog-script/SKILL.md         execute APL code via `dyalogscript`
     ├── hooks/
     │   ├── README.md                      what each hook does
-    │   ├── block-dangerous-bash.sh        deny-list: force-push, --no-verify, test bypass flags, git add wildcards, etc.
-    │   ├── protect-paths.sh               deny-list: .env, .git/, .claude/hooks/, credential dirs, CLAUDE.local.md
+    │   ├── block-dangerous-bash.sh        deny-list: force-push, --no-verify, test bypass flags, git add wildcards, writes to protected paths, reads of secret files, etc.
+    │   ├── protect-paths.sh               deny-list (writes): .env, .git/, .claude/ safety files, .mcp.json, credential dirs, CLAUDE.local.md
+    │   ├── protect-reads.sh               deny-list (reads): .env, credential dirs, private keys, CLAUDE.local.md
     │   └── audit-log.sh                   non-blocking record of every tool call
     └── statusline/
         └── statusline.sh                  branch | context usage | auto-compact headroom
