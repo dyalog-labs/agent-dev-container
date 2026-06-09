@@ -76,10 +76,18 @@ fi
 # 3. The hooks directory and statusline directory. Disabling hooks or
 # hijacking the statusline from inside a hooked session would be a prompt-
 # injection's dream. Both are edited by humans, out-of-band.
+# settings.local.json is merged over settings.json, so it can grant permissions
+# or rewire hooks just as effectively and is protected on the same footing.
 if [[ "$path" =~ (^|/)\.claude/hooks/ ]] \
    || [[ "$path" =~ (^|/)\.claude/statusline/ ]] \
-   || [[ "$path" =~ (^|/)\.claude/settings\.json$ ]]; then
-  block "The .claude/hooks/, .claude/statusline/, and .claude/settings.json are out of bounds for the agent. Edited by humans only."
+   || [[ "$path" =~ (^|/)\.claude/settings(\.local)?\.json$ ]]; then
+  block "The .claude/hooks/, .claude/statusline/, and .claude/settings.json (and settings.local.json) are out of bounds for the agent. Edited by humans only."
+fi
+
+# 3b. MCP server configuration. Introducing or altering an MCP server from
+# inside a hooked session would hand a prompt injection a new tool surface.
+if [[ "$path" =~ (^|/)\.mcp\.json$ ]]; then
+  block ".mcp.json defines MCP servers (the tool surface). Edited by humans only."
 fi
 
 # 4. SSH keys, PGP keys, AWS credentials, anything that smells like a secret.

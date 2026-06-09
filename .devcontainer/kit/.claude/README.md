@@ -47,7 +47,24 @@ Both are installed by the dev container. To verify: `which typescript-language-s
 
 ### `hooks`
 
-The three kit hooks. See `.claude/hooks/README.md`.
+The four kit hooks. See `.claude/hooks/README.md`.
+
+### `permissions`
+
+```json
+"permissions": {
+  "deny": [
+    "Read(./.env)",
+    "Read(**/.env)",
+    "Read(**/.ssh/**)",
+    "Read(**/*.pem)",
+    "Read(**/id_rsa)",
+    "Read(**/CLAUDE.local.md)"
+  ]
+}
+```
+
+A `deny` list (abbreviated above) that stops the `Read` tool opening secret files: `.env` files, credential directories, private keys, and `CLAUDE.local.md`. This is defence-in-depth alongside `protect-reads.sh`, which enforces the same paths as a `PreToolUse` hook. The Bash side is covered by `block-dangerous-bash.sh` block 11, which blocks reader commands (`cat`, `grep`, `base64`, ...) pointed at a secret; reads through an interpreter (`python -c`) remain the container's boundary. See `.claude/hooks/README.md`.
 
 ### `statusLine`
 
@@ -90,7 +107,7 @@ If LSP fails to connect despite correct configuration, restart Claude Code.
 
 ## Out of scope for this file
 
-- **Global permission rules.** Permission decisions are made interactively or through plan/auto/bypass modes.
+- **Broad permission rules.** The `permissions.deny` list here is scoped to read-protection for secret files. Wider allow/ask decisions are made interactively or through plan/auto/bypass modes.
 - **MCP servers.** The pipeline uses the `gh` CLI. Add MCP servers here if you adopt them.
 - **`disableBypassPermissionsMode` enforcement.** A managed-settings concern.
 

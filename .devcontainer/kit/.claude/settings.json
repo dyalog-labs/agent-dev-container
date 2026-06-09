@@ -21,6 +21,25 @@
     "padding": 0
   },
 
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/.ssh/**)",
+      "Read(**/.aws/**)",
+      "Read(**/.gnupg/**)",
+      "Read(**/.config/gcloud/**)",
+      "Read(**/.netrc)",
+      "Read(**/.npmrc)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa)",
+      "Read(**/id_ed25519)",
+      "Read(**/CLAUDE.local.md)"
+    ]
+  },
+
   "hooks": {
     "PreToolUse": [
       {
@@ -39,6 +58,16 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/protect-paths.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/protect-reads.sh",
             "timeout": 5
           }
         ]

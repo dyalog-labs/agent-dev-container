@@ -125,6 +125,12 @@ if echo "$command" | grep -qE '(^|[[:space:];&|])(pytest|python[[:space:]]+-m[[:
   block "pytest invoked with -x / --exitfirst / --maxfail. The full suite must run before work is considered done. Fix failing tests, don't truncate the run."
 fi
 
+# 4a. go test fail-fast. dotnet test has no native fail-fast flag, and cargo
+# test runs the whole suite by default, so Go is the only addition needed here.
+if echo "$command" | grep -qE '(^|[[:space:];&|])go[[:space:]]+test[[:space:]].*-failfast'; then
+  block "go test -failfast stops at the first failure. The full suite must run before work is considered done. Fix failing tests, don't truncate the run."
+fi
+
 # 5. Recursive deletes at the filesystem root or home directory. Belt-and-braces
 #, the dev container should prevent damage, but blocking these explicitly stops
 # Claude from even trying.
@@ -151,6 +157,33 @@ fi
 # 9. Modifying shell rc files outside the workspace.
 if echo "$command" | grep -qE '>>?[[:space:]]*~/\.(bashrc|zshrc|profile|bash_profile)([[:space:]]|$)'; then
   block "Writing to shell rc files (~/.bashrc, ~/.zshrc, etc.). Not within scope of an agentic coding task."
+fi
+
+# 10. Writing to protected paths through Bash. protect-paths.sh guards the
+# Edit/Write/MultiEdit tools; this closes the Bash side (redirects, tee, sed -i,
+# dd, cp/mv/ln into place). Fires only when a command both references a
+# protected path AND writes. Reads of secret paths are handled by
+# protect-reads.sh on the Read tool and by block 11 below for Bash.
+protected_path='(^|[^[:alnum:]_./])\.env([^[:alnum:]_]|$)|(^|[^[:alnum:]_./])\.mcp\.json([^[:alnum:]_]|$)|(^|[^[:alnum:]_./])\.git/|\.claude/(hooks|statusline)/|\.claude/settings(\.local)?\.json|(\.ssh|\.gnupg|\.aws|\.config/gcloud)/'
+write_op='>>?|(^|[[:space:];&|])(tee|dd|truncate|install)([[:space:]]|$)|(^|[[:space:];&|])sed[[:space:]]+[^|;&]*-i|(^|[[:space:];&|])(cp|mv|ln)([[:space:]]|$)'
+if echo "$command" | grep -qE "$protected_path" && echo "$command" | grep -qE "$write_op"; then
+  block "Command writes to a protected path (.env, .git/, .claude/ hooks, statusline, settings, .mcp.json, or a credential directory). These are edited by humans out-of-band, not by an agent or a shell redirect. If the user genuinely wants this change, they make it themselves."
+fi
+
+# 11. Reading secret files through Bash. protect-reads.sh guards the Read tool;
+# this closes the Bash side (cat/grep/base64/xxd of .env, private keys, credential
+# files). Scoped to secrets only, so non-secret protected paths stay readable
+# (cat .claude/settings.json, cat .git/config). Template env files are not
+# secrets and are exempted (.env.example, .env.sample, .env.template, .env.dist).
+# Writes are block 10; a read piped to a write (grep x .env > out) is caught
+# there. Interpreter-based reads (python -c, here-strings) are out of scope by
+# the same reasoning as the rest of the deny-list: the container is the boundary.
+reader='(^|[[:space:];&|()])(cat|tac|nl|head|tail|less|more|view|bat|batcat|grep|egrep|fgrep|rg|ag|awk|gawk|sed|cut|od|xxd|hexdump|strings|base64|base32|sort|uniq|rev|wc|cmp|diff|tr)([[:space:]]|$)'
+# Neutralise template env filenames so they are not treated as secrets.
+scan=$(echo "$command" | sed -E 's/(^|[^[:alnum:]_./-])\.env(\.[A-Za-z0-9_-]+)*\.(example|sample|template|dist)([^[:alnum:]_]|$)/\1ENVTPL\4/g')
+secret_read='(^|[^[:alnum:]_./-])\.env([^[:alnum:]_]|$)|(\.ssh|\.gnupg|\.aws|\.config/gcloud)/|(^|[^[:alnum:]_./-])(\.netrc|\.npmrc|\.pgpass|id_rsa|id_ed25519|id_ecdsa|id_dsa)([^[:alnum:]_]|$)|\.(pem|key|p12|pfx)([^[:alnum:]_]|$)|(^|[^[:alnum:]_./-])CLAUDE\.local\.md([^[:alnum:]_]|$)'
+if echo "$command" | grep -qE "$reader" && echo "$scan" | grep -qE "$secret_read"; then
+  block "Command reads a secret file (.env, a private key, or a credential file) through Bash. Reading secrets is off-limits regardless of tooling. If the user genuinely needs the contents, they read it themselves."
 fi
 
 # All checks passed.

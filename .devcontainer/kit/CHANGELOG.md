@@ -2,6 +2,20 @@
 
 All notable changes to the kit are recorded here. Versions follow [Semantic Versioning](https://semver.org/): MAJOR for breaking changes to the workflow or command contracts, MINOR for new commands or hooks, PATCH for fixes that don't change behaviour. While the kit is on `0.x`, expect breaking changes between minor versions.
 
+## [0.7.0] - 2026-06-09
+
+### Added
+
+- `protect-reads.sh`, a `PreToolUse` hook on the `Read` tool. It blocks reading secret files: `.env*`, credential directories (`.ssh/`, `.gnupg/`, `.aws/`, `.config/gcloud/`), private-key and credential files (`*.pem`, `*.key`, `*.p12`, `*.pfx`, `id_rsa`, `id_ed25519`, `id_ecdsa`, `id_dsa`, `.netrc`, `.npmrc`, `.pgpass`), and `CLAUDE.local.md`. This closes the read side of the secrets boundary that `protect-paths.sh` already guards on writes.
+- `permissions.deny` block in `settings.json` listing the same secret paths for the `Read` tool, as defence-in-depth alongside the hook.
+- `block-dangerous-bash.sh` rule (block 10) for writes to protected paths through Bash: redirects, `tee`, `sed -i`, `dd`, `truncate`, `install`, and `cp`/`mv`/`ln`. It fires only when a command both references a protected path and writes, closing the Bash side of the write boundary that `protect-paths.sh` enforces on Edit/Write/MultiEdit.
+- `block-dangerous-bash.sh` rule (block 11) for reads of secret files through Bash: a reader command (`cat`, `grep`, `head`, `tail`, `base64`, `xxd`, `sed`, and similar) pointed at `.env`, a credential directory, a private key, or a credential file. This closes the Bash side of the read boundary that `protect-reads.sh` enforces on the Read tool. It is scoped to secrets, so non-secret protected paths (`.claude/settings.json`, `.git/config`) stay readable, and template env files (`.env.example`, `.env.sample`, `.env.template`, `.env.dist`) are exempt. Reads through an interpreter remain out of scope.
+- `block-dangerous-bash.sh` rule for `go test -failfast`, the Go analogue of the existing `pytest -x` test-truncation guard.
+
+### Changed
+
+- `protect-paths.sh` now also blocks `.claude/settings.local.json` (merged over `settings.json`, so equally able to rewire hooks or grant permissions) and `.mcp.json` (the MCP server set).
+
 ## [0.6.0] - 2026-06-04
 
 ### Removed
