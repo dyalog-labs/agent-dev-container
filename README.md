@@ -4,6 +4,12 @@ A reproducible dev container and a slim Claude Code configuration for using Clau
 
 **Version:** see [`VERSION`](VERSION). **Licence:** MIT.
 
+> [!NOTE]
+> **Dyalog version:** the Dockerfile hardcodes the latest version available, which is fragile.
+> If you see build failures, check this line in the Dockerfile:
+>
+> `ARG DYALOG_APL_VERSION=20.0.ABCDE`
+
 ## What's here
 
 - **`.devcontainer/`** builds a Docker image with Node 20, .NET 8, Go 1.24, Python 3, Dyalog APL 20, LSP servers for all of them, the GitHub CLI, `jq`, `git-delta`, oh-my-zsh, and the Claude Code CLI. Two named volumes preserve Claude Code's user-level config and shell history across rebuilds.
@@ -11,17 +17,19 @@ A reproducible dev container and a slim Claude Code configuration for using Clau
 
 ## Quick start
 
-Clone this repository and open it in VS Code with the Dev Containers extension installed. VS Code prompts "Reopen in Container"; the first build takes 5 to 10 minutes, subsequent opens are seconds.
-
-To work on your own project inside the container:
+Clone this repository. Copy its `.devcontainer` folder into your project and open it in VS Code with the Dev Containers extension installed. VS Code prompts "Reopen in Container"; the first build takes 5 to 10 minutes, subsequent opens are seconds.
 
 ```
-cd /workspace/your-project
-install-kit-here
-claude
+git clone git@github.com:dyalog-labs/agent-dev-container.git
+mkdir my-project
+cd my-project
+cp -r ../agent-dev-container/.devcontainer
+code .
+# re-open in container, wait for build, open terminal, then
+.devcontainer/install-kit-here.sh
 ```
 
-`install-kit-here` copies `CLAUDE.md`, `PROCESS.md`, and `.claude/` from `/opt/agent-dev-container/` into your project root, preserving permissions on the hook and statusline scripts. Restart Claude Code so the hooks, statusline, and project commands load.
+`install-kit-here.sh` copies `CLAUDE.md`, `PROCESS.md`, and `.claude/` from `/opt/agent-dev-container/` into your project root, preserving permissions on the hook and statusline scripts. Restart Claude Code so the hooks, statusline, and project commands load.
 
 `/dyalog:bugfix <issue>` investigates a bug end-to-end. `/dyalog:crev <issue-or-path>` reviews work at any stage. Everything else (planning, issue creation, TDD cycles, PR opening) is ordinary conversation with Claude. See `.devcontainer/kit/PROCESS.md` for the walkthrough.
 
@@ -43,6 +51,8 @@ git config --global core.autocrlf input
 ```
 
 ## GitHub authentication
+
+If you haven't got SSH keys set up, do so first. See [Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
 
 The kit invokes `gh` for issue context inside `/dyalog:bugfix` and `/dyalog:crev`, for PR diffs and checks during review, and for opening pull requests at the end of a cycle. Inside the container, `gh` reads `GH_TOKEN` from the environment; `.devcontainer/devcontainer.json` forwards `GH_TOKEN` from the host into the container via `remoteEnv`.
 
