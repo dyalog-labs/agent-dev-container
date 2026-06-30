@@ -37,7 +37,7 @@ ENV LANGUAGE=en_US:en
 
 
 # --- Dyalog APL (v20) ---
-ARG DYALOG_APL_VERSION=20.0.52753
+ARG DYALOG_APL_VERSION=20.0.53963
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
