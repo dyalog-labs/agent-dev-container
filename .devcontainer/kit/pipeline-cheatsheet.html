@@ -1,0 +1,306 @@
+<style>
+  :root {
+    --paper:#e9ecee; --card:#ffffff; --ink:#14191f; --muted:#5c6773;
+    --line:#d5dadd; --line-soft:#e6eaec;
+    --petrol:#0b6a70; --petrol-tint:#e0edee;
+    --red:#b23036; --red-tint:#f4e5e5;
+    --green:#1e7a4e; --green-tint:#e2efe8;
+    --slate:#46525e; --slate-tint:#e7eaec;
+    --amber:#9a6410; --amber-tint:#f2e9d7;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1060px; margin:0 auto; padding:34px 26px 48px; }
+
+  /* ---- masthead ---- */
+  .mast { border-top:3px solid var(--petrol); padding-top:18px; margin-bottom:26px; }
+  .eyebrow {
+    font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--petrol); font-weight:600; margin:0 0 8px;
+  }
+  h1 {
+    font-family:var(--mono); font-weight:700; font-size:32px; line-height:1.05;
+    margin:0 0 8px; letter-spacing:-.01em; text-wrap:balance;
+  }
+  .thesis { margin:0; max-width:60ch; color:var(--muted); font-size:15px; }
+  .legend { display:flex; flex-wrap:wrap; gap:8px 14px; margin-top:16px; }
+  .lg { display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11px;
+        letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+  .dot { width:10px; height:10px; border-radius:2px; flex:none; }
+
+  /* ---- pipeline spine ---- */
+  .pipeline { position:relative; margin:8px 0 30px; }
+  .pipeline::before {
+    content:""; position:absolute; left:19px; top:14px; bottom:14px; width:2px;
+    background:linear-gradient(var(--petrol), var(--slate)); opacity:.5;
+  }
+  .stage { position:relative; display:grid; grid-template-columns:40px 1fr; gap:16px;
+           align-items:start; padding-bottom:14px; }
+  .badge {
+    width:40px; height:40px; border-radius:50%; background:var(--card);
+    border:2px solid var(--ph); color:var(--ph);
+    display:grid; place-items:center; font-family:var(--mono); font-weight:700; font-size:16px;
+    z-index:1; box-shadow:0 0 0 4px var(--paper);
+  }
+  .card {
+    background:var(--card); border:1px solid var(--line); border-radius:5px;
+    padding:13px 16px 14px;
+  }
+  .chead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:9px; }
+  .ctitle { font-family:var(--mono); font-weight:700; font-size:16px; margin:0; }
+  .tag {
+    font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ph); background:var(--ph-tint); padding:2px 8px; border-radius:3px; white-space:nowrap;
+  }
+  .desc { margin:0 0 10px; color:#333b44; font-size:14px; max-width:66ch; }
+
+  .row { display:grid; grid-template-columns:58px 1fr; gap:11px; align-items:start; margin-top:7px; }
+  .k { font-family:var(--mono); font-size:10px; letter-spacing:.09em; text-transform:uppercase;
+       color:var(--muted); padding-top:5px; }
+  code.cmd {
+    display:block; font-family:var(--mono); font-size:12.5px; line-height:1.5;
+    background:#f1f3f4; border:1px solid var(--line-soft); border-left:3px solid var(--ph);
+    border-radius:4px; padding:6px 10px; color:#1b2229; overflow-x:auto; white-space:pre-wrap; word-break:break-word;
+  }
+  code.cmd + code.cmd { margin-top:6px; }
+  .prod { font-family:var(--mono); font-size:12.5px; color:var(--petrol); padding-top:4px; }
+  .prod b { color:var(--ink); font-weight:600; }
+  .note-inline { font-size:13px; color:var(--muted); padding-top:4px; }
+  em.tight { font-style:normal; background:var(--green-tint); color:var(--green); font-family:var(--mono);
+             font-size:11px; padding:1px 6px; border-radius:3px; font-weight:600; }
+  em.loop { font-style:normal; background:var(--red-tint); color:var(--red); font-family:var(--mono);
+            font-size:11px; padding:1px 6px; border-radius:3px; font-weight:600; }
+
+  /* phase classes */
+  .plan  { --ph:var(--petrol); --ph-tint:var(--petrol-tint); }
+  .issue { --ph:var(--petrol); --ph-tint:var(--petrol-tint); }
+  .red   { --ph:var(--red);    --ph-tint:var(--red-tint); }
+  .green { --ph:var(--green);  --ph-tint:var(--green-tint); }
+  .ship  { --ph:var(--slate);  --ph-tint:var(--slate-tint); }
+  .bug   { --ph:var(--amber);  --ph-tint:var(--amber-tint); }
+
+  /* ---- reference band ---- */
+  .refs { display:grid; grid-template-columns:repeat(auto-fit, minmax(272px, 1fr)); gap:14px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:5px; padding:13px 15px 15px;
+           border-top:3px solid var(--pc, var(--petrol)); }
+  .panel h2 {
+    font-family:var(--mono); font-size:12px; letter-spacing:.09em; text-transform:uppercase;
+    margin:0 0 10px; color:var(--pc, var(--petrol)); font-weight:700;
+  }
+  .panel.amber { --pc:var(--amber); }
+  .panel.plain { --pc:var(--slate); }
+  .panel p { margin:0 0 8px; font-size:13px; color:#333b44; }
+  .panel p:last-child { margin-bottom:0; }
+  .mono-list { list-style:none; margin:0; padding:0; }
+  .mono-list li { display:grid; grid-template-columns:auto 1fr; gap:9px; padding:4px 0; font-size:12.5px;
+                  border-top:1px solid var(--line-soft); }
+  .mono-list li:first-child { border-top:0; }
+  .mono-list code { font-family:var(--mono); font-size:12px; color:var(--petrol); white-space:nowrap; }
+  .mono-list .d { color:var(--muted); }
+
+  .sev { display:flex; gap:9px; align-items:baseline; padding:3px 0; font-size:13px; }
+  .sev .pill { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+               padding:2px 7px; border-radius:3px; flex:none; min-width:64px; text-align:center; }
+  .p-crit { background:var(--red-tint); color:var(--red); }
+  .p-major{ background:var(--amber-tint); color:var(--amber); }
+  .p-minor{ background:var(--petrol-tint); color:var(--petrol); }
+  .p-note { background:var(--slate-tint); color:var(--slate); }
+  .verdicts { font-family:var(--mono); font-size:12px; color:#333b44; margin-top:9px; line-height:1.7; }
+  .verdicts b { color:var(--green); }
+  .rule { margin-top:9px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line-soft); padding-top:8px; }
+
+  .checks { list-style:none; margin:0; padding:0; counter-reset:c; }
+  .checks li { position:relative; padding:5px 0 5px 30px; font-size:13px; border-top:1px solid var(--line-soft); }
+  .checks li:first-child { border-top:0; }
+  .checks li::before {
+    counter-increment:c; content:counter(c); position:absolute; left:0; top:5px;
+    width:20px; height:20px; border-radius:50%; background:var(--green-tint); color:var(--green);
+    font-family:var(--mono); font-size:11px; font-weight:700; display:grid; place-items:center;
+  }
+  .hatch { font-size:12.5px; padding:6px 0; border-top:1px solid var(--line-soft); }
+  .hatch:first-of-type { border-top:0; }
+  .hatch b { font-family:var(--mono); font-size:11px; letter-spacing:.03em; }
+  .guards li { font-size:12.5px; padding:4px 0; color:#333b44; border-top:1px solid var(--line-soft); }
+  .guards li:first-child { border-top:0; }
+  .guards code { font-family:var(--mono); font-size:11.5px; color:var(--red); }
+
+  footer { margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+           font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.03em; }
+  footer code { color:var(--petrol); }
+
+  h1, .ctitle, .panel h2 { text-wrap:balance; }
+  a:focus-visible, li:focus-visible { outline:2px solid var(--petrol); outline-offset:2px; }
+
+  @media (max-width:560px) {
+    .row { grid-template-columns:1fr; gap:3px; }
+    .k { padding-top:2px; }
+    h1 { font-size:26px; }
+  }
+
+  @media print {
+    :root { --paper:#ffffff; }
+    body { font-size:10.5px; }
+    .wrap { max-width:none; padding:0 8px; }
+    .card, .panel { break-inside:avoid; box-shadow:none; }
+    .stage { break-inside:avoid; }
+    .badge { box-shadow:0 0 0 3px #fff; }
+    .refs { grid-template-columns:repeat(2, 1fr); }
+    * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Dyalog · Claude Code · working pipeline</p>
+    <h1>How we work</h1>
+    <p class="thesis">Idea to merged PR, one lane. Work from reviewed, versioned artefacts, not throwaway prompts. Every step does one thing, then stops for a human to look before the work moves on.</p>
+    <div class="legend">
+      <span class="lg"><span class="dot" style="background:var(--petrol)"></span>Plan &amp; issues</span>
+      <span class="lg"><span class="dot" style="background:var(--red)"></span>Tests (RED)</span>
+      <span class="lg"><span class="dot" style="background:var(--green)"></span>Build (GREEN)</span>
+      <span class="lg"><span class="dot" style="background:var(--slate)"></span>Ship</span>
+      <span class="lg"><span class="dot" style="background:var(--amber)"></span>Bug work</span>
+    </div>
+  </header>
+
+  <section class="pipeline">
+
+    <div class="stage plan">
+      <div class="badge">1</div>
+      <div class="card">
+        <div class="chead"><h3 class="ctitle">Idea to plan</h3><span class="tag">Plan mode</span></div>
+        <p class="desc">On a clean <code>main</code>, enter plan mode (shift-tab) and describe the goal. Claude explores read-only and drafts a plan. Read it closely and push back before you accept it.</p>
+        <div class="row"><span class="k">Type</span><code class="cmd">Plan &lt;what you want to build&gt;. It should…</code></div>
+        <div class="row"><span class="k">Review</span><code class="cmd">/dyalog:crev docs/plans/&lt;slug&gt;.md   (separate window, optional but wise)</code></div>
+        <div class="row"><span class="k">Save</span><code class="cmd">Save the plan to docs/plans/&lt;slug&gt;.md and remove the temporary file</code></div>
+        <div class="row"><span class="k">Makes</span><span class="prod"><b>docs/plans/&lt;slug&gt;.md</b></span></div>
+      </div>
+    </div>
+
+    <div class="stage issue">
+      <div class="badge">2</div>
+      <div class="card">
+        <div class="chead"><h3 class="ctitle">Plan to issues</h3><span class="tag">GitHub</span></div>
+        <p class="desc">Turn the plan into trackable work. One Epic groups the child issues; each issue carries its own acceptance criteria and points back at the plan.</p>
+        <div class="row"><span class="k">Type</span><code class="cmd">Convert docs/plans/&lt;slug&gt;.md to GitHub Epics and linked sub-issues, each referencing the plan document for context.</code></div>
+        <div class="row"><span class="k">Makes</span><span class="prod"><b>1 Epic + child issues</b> with acceptance criteria</span></div>
+        <div class="row"><span class="k">Check</span><span class="note-inline">Open them on GitHub. The rendered version often reads differently from the source.</span></div>
+      </div>
+    </div>
+
+    <div class="stage red">
+      <div class="badge">3</div>
+      <div class="card">
+        <div class="chead"><h3 class="ctitle">Write the tests</h3><span class="tag">RED</span></div>
+        <p class="desc">One prompt per step. Claude creates the branch, writes tests that fail for the right reason (one behaviour each, no shared state), records them, and stops. Nothing is committed until the review approves it.</p>
+        <div class="row"><span class="k">Type</span><code class="cmd">Proceed &lt;issue-number&gt;</code></div>
+        <div class="row"><span class="k">Does</span><span class="note-inline">Branch <code style="font-family:var(--mono);font-size:12px">&lt;id&gt;-&lt;slug&gt;</code> · failing tests · writes the PR doc · stops.</span></div>
+        <div class="row"><span class="k">Review</span><code class="cmd">/clear   then   /dyalog:crev &lt;id&gt;</code></div>
+        <div class="row"><span class="k">Loop</span><span class="note-inline"><em class="tight">Approved; proceed</em> &nbsp;or&nbsp; <em class="loop">Read the review at docs/reviews/&lt;id&gt;.md and address its findings</em> &nbsp;until approved.</span></div>
+        <div class="row"><span class="k">Makes</span><span class="prod"><b>docs/prs/&lt;id&gt;.md</b> · <b>docs/reviews/&lt;id&gt;.md</b></span></div>
+      </div>
+    </div>
+
+    <div class="stage green">
+      <div class="badge">4</div>
+      <div class="card">
+        <div class="chead"><h3 class="ctitle">Make them pass</h3><span class="tag">GREEN</span></div>
+        <p class="desc">Same one-step rhythm. On approval Claude commits the tests, writes just enough code to turn them green, runs the full suite and linters, updates the PR doc, and stops for the second review.</p>
+        <div class="row"><span class="k">Trigger</span><code class="cmd">Approved; proceed</code></div>
+        <div class="row"><span class="k">Does</span><span class="note-inline">Commits approved tests · implements to green · full suite + linters · updates PR doc · stops.</span></div>
+        <div class="row"><span class="k">Review</span><span class="note-inline">Same as RED, but <b>keep the context</b> this time. No <code style="font-family:var(--mono);font-size:12px">/clear</code>.</span></div>
+      </div>
+    </div>
+
+    <div class="stage ship">
+      <div class="badge">5</div>
+      <div class="card">
+        <div class="chead"><h3 class="ctitle">Open the PR, then merge</h3><span class="tag">Ship</span></div>
+        <p class="desc">When the issue is done, push and open the PR. You merge it after human review and green CI. The pipeline never merges for you.</p>
+        <div class="row"><span class="k">Type</span><code class="cmd">Run the full test suite. If it passes, push the branch and open a pull request that summarises the cycles in docs/prs/&lt;id&gt;.md.</code></div>
+        <div class="row"><span class="k">Merged</span><code class="cmd">PR merged. Pull from upstream and remove my local branch which is now merged.</code></div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="refs">
+
+    <div class="panel amber">
+      <h2>Bug work — alternate start</h2>
+      <p>Bugs enter through their own command, then join the cycle at step 3.</p>
+      <div class="row" style="margin-top:2px"><span class="k">Start</span><code class="cmd" style="border-left-color:var(--amber)">/dyalog:bugfix &lt;issue-number&gt;</code></div>
+      <p style="margin-top:9px">Reproduces the bug for real, writes failing regression tests, and writes <code style="font-family:var(--mono);font-size:12px;color:var(--petrol)">docs/bugs/&lt;id&gt;.md</code>: verified repro, root cause (file, function, why), fix outline, and an <b>Also Impacts</b> section. No production code.</p>
+      <p class="rule" style="color:var(--red)">If it cannot reproduce, it stops. Do not let it proceed to a fix.</p>
+      <p style="margin-top:8px">Then <code style="font-family:var(--mono);font-size:12px;color:var(--petrol)">/dyalog:crev &lt;id&gt;</code>, and continue from step 3.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Reading a review</h2>
+      <div class="sev"><span class="pill p-crit">Critical</span><span>Must fix before merge. Correctness, regressions.</span></div>
+      <div class="sev"><span class="pill p-major">Major</span><span>Should fix before merge. Gaps, API issues.</span></div>
+      <div class="sev"><span class="pill p-minor">Minor</span><span>Nice to fix. Style, docs, small wins.</span></div>
+      <div class="sev"><span class="pill p-note">Note</span><span>No change needed. Debt, follow-up ideas.</span></div>
+      <div class="verdicts">Verdict: <b>Approve</b> · <b>Approve with minor changes</b> · Request changes</div>
+      <p class="rule">A Critical means Request changes. Minor findings and Notes never gate the verdict.</p>
+    </div>
+
+    <div class="panel plain">
+      <h2>Two windows</h2>
+      <p><b style="font-family:var(--mono);font-size:12px">Window 1</b>, planner / implementer. Drives the cycle with <code style="font-family:var(--mono);font-size:12px;color:var(--petrol)">Proceed</code>.</p>
+      <p><b style="font-family:var(--mono);font-size:12px">Window 2</b>, reviewer. Runs <code style="font-family:var(--mono);font-size:12px;color:var(--petrol)">/dyalog:crev</code> in a fresh context.</p>
+      <p class="rule"><code style="font-family:var(--mono);font-size:12px;color:var(--red)">/clear</code> the reviewer before the RED (tests) review. <b>Keep</b> its context for the GREEN (implementation) review.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Where things live</h2>
+      <ul class="mono-list">
+        <li><code>docs/plans/</code><span class="d">Feature plans</span></li>
+        <li><code>docs/bugs/</code><span class="d">Repro, RCA, fix outline</span></li>
+        <li><code>docs/prs/</code><span class="d">PR notes, append-only, one entry / cycle</span></li>
+        <li><code>docs/reviews/</code><span class="d">Review log per issue</span></li>
+      </ul>
+    </div>
+
+    <div class="panel plain">
+      <h2>Done when</h2>
+      <ol class="checks">
+        <li>The full test suite passes.</li>
+        <li>Linters and type checks pass.</li>
+        <li>The PR doc is honest across all cycles.</li>
+        <li>Latest verdict is Approve (or Approve with minor changes).</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h2>Guardrails (hooks enforce)</h2>
+      <ul class="guards mono-list" style="display:block">
+        <li>No <code>--force</code> push · no push to <code>main</code></li>
+        <li>No <code>--no-verify</code> · no bulk <code>git add</code> · no <code>commit -a</code></li>
+        <li>No <code>rm -rf</code> of <code>/ ~ .git</code> · no <code>curl | sh</code> · no <code>sudo</code></li>
+        <li>Can't touch <code>.claude/</code> hooks, settings, <code>.mcp.json</code></li>
+        <li>Secrets (<code>.env</code>, keys) are unreadable</li>
+      </ul>
+    </div>
+
+    <div class="panel amber">
+      <h2>When to skip the pipeline</h2>
+      <div class="hatch"><b>Trivial fix:</b> under 10 lines, no behaviour change. Edit and commit directly. Hooks still apply.</div>
+      <div class="hatch"><b>Urgent prod fix:</b> fix, ship, post-mortem after. Point <code style="font-family:var(--mono);font-size:11px;color:var(--petrol)">bugfix</code> at the pre-fix commit.</div>
+      <div class="hatch"><b>Exploratory spike:</b> throwaway branch, outside the pipeline. Discard it, then plan properly.</div>
+    </div>
+
+  </section>
+
+  <footer>
+    Full detail in <code>PROCESS.md</code> · conventions in <code>CLAUDE.md</code> · commands in <code>.claude/commands/dyalog/</code>
+  </footer>
+
+</div>
