@@ -29,10 +29,10 @@ At any review point: `/dyalog:crev <issue-number>` or `/dyalog:crev docs/plans/<
 
 ## Cheat sheets
 
-Two printable one-page references sit at the kit root:
+Two printable one-page references sit at the kit root. Each is also published as a hosted artifact (Dyalog access required):
 
-- [`pipeline-cheatsheet.html`](pipeline-cheatsheet.html): the plan-to-merge workflow at a glance, the visual companion to `PROCESS.md`.
-- [`claude-code-commands.html`](claude-code-commands.html): Claude Code's built-in slash commands, keyboard shortcuts, and input modes.
+- [`pipeline-cheatsheet.html`](pipeline-cheatsheet.html): the plan-to-merge workflow at a glance, the visual companion to `PROCESS.md`. Hosted: https://claude.ai/code/artifact/d1f2b87b-a145-4a8a-9465-986498059639
+- [`claude-code-commands.html`](claude-code-commands.html): Claude Code's built-in slash commands, keyboard shortcuts, and input modes. Hosted: https://claude.ai/code/artifact/98f69443-5bd1-4744-b980-e537c5dbf688
 
 Open either in a browser and print, or save as PDF, for a handout.
 
