@@ -2,6 +2,8 @@
 
 The kit ships two project slash commands. Everything else in the workflow happens through ordinary conversation with Claude.
 
+For a quick reference to Claude Code's own built-in slash commands (distinct from the two project commands documented here), see [`claude-code-commands.html`](../../claude-code-commands.html) at the kit root.
+
 ## What each command does
 
 ### `/dyalog:bugfix <issue-number>`

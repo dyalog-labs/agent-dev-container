@@ -27,12 +27,23 @@ For bugs: `/dyalog:bugfix <issue-number>` produces a verified repro, root-cause 
 
 At any review point: `/dyalog:crev <issue-number>` or `/dyalog:crev docs/plans/<slug>.md`.
 
+## Cheat sheets
+
+Two printable one-page references sit at the kit root:
+
+- [`pipeline-cheatsheet.html`](pipeline-cheatsheet.html): the plan-to-merge workflow at a glance, the visual companion to `PROCESS.md`.
+- [`claude-code-commands.html`](claude-code-commands.html): Claude Code's built-in slash commands, keyboard shortcuts, and input modes.
+
+Open either in a browser and print, or save as PDF, for a handout.
+
 ## What's in the box
 
 ```
 .
 ├── CLAUDE.md                              project memory: conventions, branch naming, writing style, definition of done
 ├── PROCESS.md                             how to take a feature from idea to merged PR using the kit
+├── pipeline-cheatsheet.html               printable one-page summary of the PROCESS.md workflow
+├── claude-code-commands.html              printable reference: Claude Code built-in commands and shortcuts
 ├── CHANGELOG.md                           release notes
 ├── VERSION                                semver version of this kit
 ├── LICENSE                                MIT
