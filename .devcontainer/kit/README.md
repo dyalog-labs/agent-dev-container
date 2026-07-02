@@ -37,6 +37,8 @@ Three printable one-page references sit at the kit root:
 
 The hosted artifacts are visible only to members of the Dyalog organisation. Anyone without org access should open the in-repo `.html` file instead, then print or save as PDF for a handout.
 
+`PROCESS.md` itself is also published as a hosted page in the same house style (the full workflow document, not a one-page summary), visible to the Dyalog organisation: https://claude.ai/code/artifact/d1b031a8-cbc4-4aea-8b29-1077cfdd5ab6. It has no in-repo `.html`; the Markdown `PROCESS.md` is the source of truth, and the hosted page is refreshed by hand when the document changes.
+
 ## What's in the box
 
 ```
