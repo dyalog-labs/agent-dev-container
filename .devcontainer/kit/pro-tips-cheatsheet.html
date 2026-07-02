@@ -1,0 +1,184 @@
+<style>
+  :root {
+    --paper:#e9ecee; --card:#ffffff; --ink:#14191f; --muted:#5c6773;
+    --line:#d5dadd; --line-soft:#e6eaec;
+    --petrol:#0b6a70; --petrol-tint:#e0edee;
+    --red:#b23036; --red-tint:#f4e5e5;
+    --green:#1e7a4e; --green-tint:#e2efe8;
+    --slate:#46525e; --slate-tint:#e7eaec;
+    --amber:#9a6410; --amber-tint:#f2e9d7;
+    --stamp:#c0392f;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:780px; margin:0 auto; padding:34px 26px 48px; }
+
+  .mast { border-top:3px solid var(--petrol); padding-top:18px; margin-bottom:28px; }
+  .mast-top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+  .eyebrow {
+    font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--petrol); font-weight:600; margin:0 0 8px;
+  }
+  h1 {
+    font-family:var(--mono); font-weight:700; font-size:32px; line-height:1.05;
+    margin:0; letter-spacing:-.01em; text-wrap:balance;
+  }
+  .stamp {
+    transform:rotate(-3deg); border:4px double var(--stamp); border-radius:7px; padding:5px 12px;
+    color:var(--stamp); font-family:var(--mono); font-weight:700; font-size:15px;
+    letter-spacing:.16em; text-transform:uppercase; white-space:nowrap; margin-top:4px;
+  }
+  .thesis { margin:16px 0 0; max-width:70ch; color:var(--muted); font-size:14.5px; }
+  .thesis code { font-family:var(--mono); font-size:12.5px; color:var(--petrol); }
+
+  .tips { display:flex; flex-direction:column; gap:26px; }
+  .theme { --pc:var(--petrol); }
+  .theme.plain { --pc:var(--slate); }
+  .theme.amber { --pc:var(--amber); }
+  .theme.green { --pc:var(--green); }
+  .theme h2 {
+    font-family:var(--mono); font-size:12px; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--pc); font-weight:700; margin:0 0 4px; padding-bottom:7px;
+    border-bottom:1px solid var(--line); display:flex; align-items:center; gap:9px;
+  }
+  .theme h2::before { content:""; width:10px; height:10px; border-radius:2px; background:var(--pc); flex:none; }
+
+  .tip { padding:13px 0; border-top:1px solid var(--line-soft); }
+  .tip:first-of-type { border-top:0; }
+  .stmt { margin:0 0 5px; font-size:17px; font-weight:600; color:var(--ink); line-height:1.32; text-wrap:balance; }
+  .stmt em { font-style:italic; }
+  .stmt strong { font-weight:800; }
+  .gloss { margin:0; font-size:13.5px; color:#454f57; line-height:1.5; max-width:72ch; }
+  .gloss code { font-family:var(--mono); font-size:12px; color:var(--petrol); }
+  .meta { margin-top:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .chip { font-family:var(--mono); font-size:12px; color:var(--petrol); background:var(--petrol-tint);
+          padding:2px 8px; border-radius:3px; white-space:nowrap; }
+  a.src { font-family:var(--mono); font-size:11.5px; color:var(--petrol); text-decoration:none;
+          border-bottom:1px solid var(--petrol-tint); }
+  a.src:hover { border-bottom-color:var(--petrol); }
+  a:focus-visible { outline:2px solid var(--petrol); outline-offset:2px; }
+
+  footer { margin-top:30px; padding-top:14px; border-top:1px solid var(--line);
+           font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.02em; line-height:1.6; }
+  footer code { color:var(--petrol); }
+
+  h1, .stmt { text-wrap:balance; }
+
+  @media (max-width:560px) {
+    h1 { font-size:26px; }
+    .stamp { font-size:13px; }
+    .stmt { font-size:16px; }
+  }
+  @media print {
+    :root { --paper:#ffffff; }
+    body { font-size:11px; }
+    .wrap { max-width:none; padding:0 6px; }
+    .theme { break-inside:avoid; }
+    .tip { break-inside:avoid; }
+    * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <div class="mast-top">
+      <div>
+        <p class="eyebrow">Dyalog · coding with agents · workshop pro tips</p>
+        <h1>Pro tips</h1>
+      </div>
+      <span class="stamp">Pro tip</span>
+    </div>
+    <p class="thesis">The pro-tip slides from the Coding with Agents workshop, on one page. The short version of working well with an agent: plan before you prompt, keep it in bounds, and give it ways to check its own work. Several of these are the principles the kit's <code>PROCESS.md</code> is built on.</p>
+  </header>
+
+  <section class="tips">
+
+    <div class="theme">
+      <h2>Mindset &amp; judgement</h2>
+
+      <div class="tip">
+        <p class="stmt">Vibe coding is <em>not</em> agentic engineering.</p>
+        <p class="gloss">Working with agents seriously is a disciplined practice, not casual improvisation.</p>
+        <div class="meta">
+          <a class="src" href="https://simonwillison.net/guides/agentic-engineering-patterns/what-is-agentic-engineering/" target="_blank" rel="noopener">simonwillison.net &middot; what is agentic engineering</a>
+        </div>
+      </div>
+
+      <div class="tip">
+        <p class="stmt">Freestyle prompting is for steering, not design.</p>
+        <p class="gloss">Use ad-hoc prompts to nudge and course-correct; do the actual design through a plan you can review.</p>
+      </div>
+
+      <div class="tip">
+        <p class="stmt">Don't ask Claude to "do something". Ask it to draft a <strong>plan</strong> for how to do it.</p>
+        <p class="gloss">Turn a vague instruction into a plan you read and approve before any code is written.</p>
+      </div>
+    </div>
+
+    <div class="theme plain">
+      <h2>Manage the context</h2>
+
+      <div class="tip">
+        <p class="stmt">Compact at logical milestones.</p>
+        <p class="gloss">Condense the conversation at natural stopping points, not at random, so the context stays focused.</p>
+        <div class="meta"><span class="chip">/compact</span></div>
+      </div>
+    </div>
+
+    <div class="theme amber">
+      <h2>Permissions &amp; modes</h2>
+
+      <div class="tip">
+        <p class="stmt">Start in <em>yolo</em>, but run in <em>auto</em>.</p>
+        <p class="gloss">Launch fast with <code>--dangerously-skip-permissions</code>, then keep everyday work in the safer auto mode.</p>
+      </div>
+
+      <div class="tip">
+        <p class="stmt">Use plan mode when scoping.</p>
+        <p class="gloss">Let Claude research and propose read-only, before it touches the code. Shift-Tab into plan mode.</p>
+      </div>
+    </div>
+
+    <div class="theme green">
+      <h2>Build in correctness</h2>
+
+      <div class="tip">
+        <p class="stmt">Give Claude a way to verify its own work.</p>
+        <p class="gloss">Tests and checks let the agent confirm its output instead of guessing.</p>
+      </div>
+
+      <div class="tip">
+        <p class="stmt">Strong types REALLY helps.</p>
+        <p class="gloss">Static types are guardrails: they catch the agent's mistakes before you have to.</p>
+      </div>
+
+      <div class="tip">
+        <p class="stmt">Use the static analysers, linters, and formatters your tool chain provides.</p>
+        <p class="gloss">Every automated correctness signal your stack offers is one more check the agent gets for free.</p>
+      </div>
+    </div>
+
+    <div class="theme">
+      <h2>Where humans add value</h2>
+
+      <div class="tip">
+        <p class="stmt">Review designs, architecture, APIs, test surfaces... <em>not</em> every line of code.</p>
+        <p class="gloss">Spend your attention where judgement matters, not on scrutinising every generated line.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    Source: the Coding with Agents workshop deck, slides marked with the "pro tip" stamp.<br>
+    Companion to <code>pipeline-cheatsheet.html</code> and <code>claude-code-commands.html</code>.
+  </footer>
+
+</div>

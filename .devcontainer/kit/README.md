@@ -29,10 +29,11 @@ At any review point: `/dyalog:crev <issue-number>` or `/dyalog:crev docs/plans/<
 
 ## Cheat sheets
 
-Two printable one-page references sit at the kit root:
+Three printable one-page references sit at the kit root:
 
 - [`pipeline-cheatsheet.html`](pipeline-cheatsheet.html): the plan-to-merge workflow at a glance, the visual companion to `PROCESS.md`. Hosted artifact: https://claude.ai/code/artifact/d1f2b87b-a145-4a8a-9465-986498059639
 - [`claude-code-commands.html`](claude-code-commands.html): Claude Code's built-in slash commands, keyboard shortcuts, and input modes. Hosted artifact: https://claude.ai/code/artifact/98f69443-5bd1-4744-b980-e537c5dbf688
+- [`pro-tips-cheatsheet.html`](pro-tips-cheatsheet.html): the pro tips from the Coding with Agents workshop, distilled onto one page. Hosted artifact: https://claude.ai/code/artifact/1eb7a9ee-0f08-4efc-897a-0c86a3b7469a
 
 The hosted artifacts are visible only to members of the Dyalog organisation. Anyone without org access should open the in-repo `.html` file instead, then print or save as PDF for a handout.
 
@@ -44,6 +45,7 @@ The hosted artifacts are visible only to members of the Dyalog organisation. Any
 ├── PROCESS.md                             how to take a feature from idea to merged PR using the kit
 ├── pipeline-cheatsheet.html               printable one-page summary of the PROCESS.md workflow
 ├── claude-code-commands.html              printable reference: Claude Code built-in commands and shortcuts
+├── pro-tips-cheatsheet.html               printable one-page distillation of the workshop pro tips
 ├── CHANGELOG.md                           release notes
 ├── VERSION                                semver version of this kit
 ├── LICENSE                                MIT
