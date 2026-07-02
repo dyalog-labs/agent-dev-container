@@ -78,6 +78,8 @@
   footer a { color:var(--petrol); text-decoration:none; border-bottom:1px solid var(--petrol-tint); }
   footer a:hover { border-bottom-color:var(--petrol); }
   a:focus-visible { outline:2px solid var(--petrol); outline-offset:2px; }
+  .cmdlink { text-decoration:none; border-bottom:1px solid var(--petrol-tint); }
+  .cmdlink:hover { border-bottom-color:var(--petrol); }
 
   h1, .panel h2 { text-wrap:balance; }
 
@@ -107,60 +109,60 @@
 
     <div class="panel">
       <h2>Session &amp; context</h2>
-      <div class="ci"><code>/clear</code><span class="d">Start fresh with empty context. The old chat stays in <code style="color:var(--muted)">/resume</code>.</span></div>
-      <div class="ci"><code>/resume</code><span class="d">Reopen a past session. <span class="al">(/continue)</span></span></div>
-      <div class="ci"><code>/compact</code><span class="d">Summarise the chat to reclaim context.</span></div>
-      <div class="ci"><code>/context</code><span class="d">Show how full the context window is.</span></div>
-      <div class="ci"><code>/rewind</code><span class="d">Roll code and chat back to a checkpoint.</span></div>
-      <div class="ci"><code>/export</code><span class="d">Save the conversation to a text file.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/sessions" target="_blank" rel="noopener"><code>/clear</code></a><span class="d">Start fresh with empty context. The old chat stays in <code style="color:var(--muted)">/resume</code>.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/sessions" target="_blank" rel="noopener"><code>/resume</code></a><span class="d">Reopen a past session. <span class="al">(/continue)</span></span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/context-window" target="_blank" rel="noopener"><code>/compact</code></a><span class="d">Summarise the chat to reclaim context.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/context-window" target="_blank" rel="noopener"><code>/context</code></a><span class="d">Show how full the context window is.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/checkpointing" target="_blank" rel="noopener"><code>/rewind</code></a><span class="d">Roll code and chat back to a checkpoint.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/sessions" target="_blank" rel="noopener"><code>/export</code></a><span class="d">Save the conversation to a text file.</span></div>
     </div>
 
     <div class="panel">
       <h2>Plan, models &amp; memory</h2>
-      <div class="ci"><code>/plan</code><span class="d">Enter plan mode: propose before editing. <span class="al">(or Shift+Tab)</span></span></div>
-      <div class="ci"><code>/model</code><span class="d">Switch model and set the default.</span></div>
-      <div class="ci"><code>/effort</code><span class="d">Set reasoning effort, low through max.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/permission-modes" target="_blank" rel="noopener"><code>/plan</code></a><span class="d">Enter plan mode: propose before editing. <span class="al">(or Shift+Tab)</span></span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener"><code>/model</code></a><span class="d">Switch model and set the default.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/model-config" target="_blank" rel="noopener"><code>/effort</code></a><span class="d">Set reasoning effort, low through max.</span></div>
       <div class="ci"><code>/config</code><span class="d">Open settings. <span class="al">(/settings)</span></span></div>
-      <div class="ci"><code>/permissions</code><span class="d">Manage allow / ask / deny tool rules.</span></div>
-      <div class="ci"><code>/memory</code><span class="d">Edit CLAUDE.md and auto-memory.</span></div>
-      <div class="ci"><code>/init</code><span class="d">Generate a CLAUDE.md for the project.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/permissions" target="_blank" rel="noopener"><code>/permissions</code></a><span class="d">Manage allow / ask / deny tool rules.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener"><code>/memory</code></a><span class="d">Edit CLAUDE.md and auto-memory.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener"><code>/init</code></a><span class="d">Generate a CLAUDE.md for the project.</span></div>
     </div>
 
     <div class="panel">
       <h2>Code, git &amp; review</h2>
       <div class="ci"><code>/diff</code><span class="d">Interactive diff of uncommitted changes.</span></div>
-      <div class="ci"><code>/code-review</code><span class="d">Review your working diff for bugs. <span class="al">(--fix, --comment)</span></span></div>
-      <div class="ci"><code>/simplify</code><span class="d">Cleanup pass on the changed code.</span></div>
-      <div class="ci"><code>/review</code><span class="d">Review a GitHub pull request.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/code-review" target="_blank" rel="noopener"><code>/code-review</code></a><span class="d">Review your working diff for bugs. <span class="al">(--fix, --comment)</span></span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/code-review" target="_blank" rel="noopener"><code>/simplify</code></a><span class="d">Cleanup pass on the changed code.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/code-review" target="_blank" rel="noopener"><code>/review</code></a><span class="d">Review a GitHub pull request.</span></div>
       <div class="ci"><code>/security-review</code><span class="d">Scan pending changes for vulnerabilities.</span></div>
     </div>
 
     <div class="panel">
       <h2>Extend &amp; connect</h2>
-      <div class="ci"><code>/agents</code><span class="d">Create and manage subagents.</span></div>
-      <div class="ci"><code>/mcp</code><span class="d">Connect and manage MCP servers.</span></div>
-      <div class="ci"><code>/hooks</code><span class="d">View hook configuration for tool events.</span></div>
-      <div class="ci"><code>/run</code><span class="d">Launch and drive your project's app.</span></div>
-      <div class="ci"><code>/verify</code><span class="d">Build and run to confirm a change works.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener"><code>/agents</code></a><span class="d">Create and manage subagents.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener"><code>/mcp</code></a><span class="d">Connect and manage MCP servers.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/hooks-guide" target="_blank" rel="noopener"><code>/hooks</code></a><span class="d">View hook configuration for tool events.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener"><code>/run</code></a><span class="d">Launch and drive your project's app.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener"><code>/verify</code></a><span class="d">Build and run to confirm a change works.</span></div>
     </div>
 
     <div class="panel">
       <h2>Background, automation &amp; remote</h2>
       <div class="ci"><code>/background</code><span class="d">Detach the session as a background agent. <span class="al">(/bg)</span></span></div>
       <div class="ci"><code>/tasks</code><span class="d">Manage background work. <span class="al">(/bashes)</span></span></div>
-      <div class="ci"><code>/loop</code><span class="d">Run a prompt on a repeating interval.</span></div>
-      <div class="ci"><code>/goal</code><span class="d">Keep working until a stated condition is met. <span class="al">(/goal clear to stop)</span></span></div>
-      <div class="ci"><code>/workflows</code><span class="d">Watch and manage running workflows.</span></div>
-      <div class="ci"><code>/remote-control</code><span class="d">Drive this session from claude.ai. <span class="al">(/rc)</span></span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/scheduled-tasks" target="_blank" rel="noopener"><code>/loop</code></a><span class="d">Run a prompt on a repeating interval.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/goal" target="_blank" rel="noopener"><code>/goal</code></a><span class="d">Keep working until a stated condition is met. <span class="al">(/goal clear to stop)</span></span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/workflows" target="_blank" rel="noopener"><code>/workflows</code></a><span class="d">Watch and manage running workflows.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/remote-control" target="_blank" rel="noopener"><code>/remote-control</code></a><span class="d">Drive this session from claude.ai. <span class="al">(/rc)</span></span></div>
     </div>
 
     <div class="panel">
       <h2>Account, help &amp; health</h2>
       <div class="ci"><code>/help</code><span class="d">List the available commands.</span></div>
-      <div class="ci"><code>/usage</code><span class="d">Session cost, plan limits, activity. <span class="al">(/cost)</span></span></div>
-      <div class="ci"><code>/doctor</code><span class="d">Diagnose the installation and settings.</span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/costs" target="_blank" rel="noopener"><code>/usage</code></a><span class="d">Session cost, plan limits, activity. <span class="al">(/cost)</span></span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/troubleshooting" target="_blank" rel="noopener"><code>/doctor</code></a><span class="d">Diagnose the installation and settings.</span></div>
       <div class="ci"><code>/feedback</code><span class="d">Report a bug or share a session. <span class="al">(/bug)</span></span></div>
-      <div class="ci"><code>/login</code><span class="d">Sign in. <span class="al">(/logout to sign out)</span></span></div>
+      <div class="ci"><a class="cmdlink" href="https://code.claude.com/docs/en/authentication" target="_blank" rel="noopener"><code>/login</code></a><span class="d">Sign in. <span class="al">(/logout to sign out)</span></span></div>
       <div class="ci"><code>/exit</code><span class="d">Quit Claude Code. <span class="al">(/quit)</span></span></div>
     </div>
 
@@ -197,7 +199,7 @@
         <span class="mode m-lock">dontAsk</span><span class="d">Runs only pre-approved tools, plus read-only Bash.</span>
         <span class="mode m-danger">bypassPermissions</span><span class="d">No permission checks at all. Isolated containers only. <span class="al">(permissions off)</span></span>
       </div>
-      <p class="note-sm"><kbd>Shift+Tab</kbd> cycles the first four. <code>dontAsk</code> and <code>bypassPermissions</code> are set with <code>--permission-mode</code> at launch. <code>/sandbox</code> adds OS-level filesystem and network isolation for Bash (macOS, Linux/WSL2), independent of these modes.</p>
+      <p class="note-sm"><kbd>Shift+Tab</kbd> cycles the first four. <code>dontAsk</code> and <code>bypassPermissions</code> are set with <code>--permission-mode</code> at launch. <a class="cmdlink" href="https://code.claude.com/docs/en/sandboxing" target="_blank" rel="noopener"><code>/sandbox</code></a> adds OS-level filesystem and network isolation for Bash (macOS, Linux/WSL2), independent of these modes.</p>
     </div>
 
   </section>
