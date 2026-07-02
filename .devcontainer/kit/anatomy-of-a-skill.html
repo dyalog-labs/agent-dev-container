@@ -1,0 +1,210 @@
+<title>Anatomy of a Skill</title>
+<style>
+  :root {
+    --paper:#e9ecee; --card:#ffffff; --ink:#14191f; --muted:#5c6773;
+    --line:#d5dadd; --line-soft:#e6eaec;
+    --petrol:#0b6a70; --petrol-tint:#e0edee;
+    --red:#b23036; --red-tint:#f4e5e5;
+    --green:#1e7a4e; --green-tint:#e2efe8;
+    --slate:#46525e; --slate-tint:#e7eaec;
+    --amber:#9a6410; --amber-tint:#f2e9d7;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:#262d34;
+         font-family:var(--sans); font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:980px; margin:0 auto; padding:34px 26px 48px; }
+
+  .mast { border-top:3px solid var(--petrol); padding-top:18px; margin-bottom:24px; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+             color:var(--petrol); font-weight:600; margin:0 0 8px; }
+  h1 { font-family:var(--mono); font-weight:700; font-size:32px; line-height:1.05; margin:0;
+       letter-spacing:-.01em; color:var(--ink); text-wrap:balance; }
+  .thesis { margin:14px 0 0; max-width:82ch; color:var(--muted); font-size:14.5px; }
+  .thesis code { font-family:var(--mono); font-size:12.5px; color:var(--petrol); }
+
+  h2 { font-family:var(--mono); font-size:12px; letter-spacing:.11em; text-transform:uppercase;
+       color:var(--petrol); font-weight:700; margin:32px 0 12px; padding-bottom:6px;
+       border-bottom:1px solid var(--line); }
+
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+
+  pre { background:#f1f3f4; border:1px solid var(--line-soft); border-left:3px solid var(--petrol);
+        border-radius:5px; padding:12px 14px; margin:0; overflow-x:auto; }
+  pre code { font-family:var(--mono); font-size:12.5px; line-height:1.6; color:#1b2229;
+             background:none; padding:0; white-space:pre; }
+  .cap { font-size:13px; color:#3a434c; margin:0 0 10px; }
+  .cap b { color:var(--ink); }
+
+  .mk { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px;
+        border-radius:50%; background:var(--petrol); color:#fff; font-family:var(--sans);
+        font-size:10px; font-weight:700; line-height:1; vertical-align:middle; }
+
+  .legend { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .legend li { display:grid; grid-template-columns:18px 1fr; gap:10px; align-items:start; font-size:12.7px; line-height:1.45; }
+  .legend .mk { margin-top:1px; }
+  .legend code { font-family:var(--mono); font-size:11.5px; color:var(--petrol); background:var(--petrol-tint);
+                 padding:1px 5px; border-radius:3px; }
+  .legend b { color:var(--ink); }
+
+  .refs { display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px; align-items:start; margin-top:14px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:5px; padding:13px 15px 14px;
+           border-top:3px solid var(--pc, var(--petrol)); break-inside:avoid; }
+  .panel h3 { font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+              margin:0 0 9px; color:var(--pc, var(--petrol)); font-weight:700; }
+  .panel.plain { --pc:var(--slate); }
+  .panel.amber { --pc:var(--amber); }
+
+  .ci { display:grid; grid-template-columns:minmax(96px, max-content) 1fr; gap:11px; align-items:baseline;
+        padding:5px 0; border-top:1px solid var(--line-soft); font-size:12.7px; }
+  .ci:first-child { border-top:0; }
+  .ci code { font-family:var(--mono); font-size:11.5px; color:var(--petrol); font-weight:600; white-space:nowrap; }
+  .ci .d { color:#38424b; }
+  .star { color:var(--red); font-weight:700; }
+
+  .rows { display:flex; flex-direction:column; }
+  .row2 { padding:6px 0; border-top:1px solid var(--line-soft); font-size:12.7px; line-height:1.45; }
+  .row2:first-child { border-top:0; }
+  .row2 b { font-family:var(--mono); font-size:11.5px; color:var(--petrol); letter-spacing:.02em; }
+  .row2 code { font-family:var(--mono); font-size:11.5px; color:var(--petrol); }
+
+  a { color:var(--petrol); text-decoration:none; border-bottom:1px solid var(--petrol-tint); }
+  a:hover { border-bottom-color:var(--petrol); }
+  a:focus-visible { outline:2px solid var(--petrol); outline-offset:2px; }
+
+  footer { margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+           font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.02em; line-height:1.7; }
+
+  @media (max-width:620px) { .two { grid-template-columns:1fr; } h1 { font-size:26px; } }
+  @media print {
+    :root { --paper:#ffffff; }
+    body { font-size:10.6px; }
+    .wrap { max-width:none; padding:0 6px; }
+    .refs { grid-template-columns:repeat(2, 1fr); }
+    .panel, pre, .two { break-inside:avoid; }
+    * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Claude Code · agent skills</p>
+    <h1>Anatomy of a Skill</h1>
+    <p class="thesis">A skill is a folder that teaches Claude a repeatable capability. The only required file is <code>SKILL.md</code>: YAML frontmatter plus a Markdown body. Claude loads a skill's one-line description at all times, and pulls in the rest only when it is needed.</p>
+  </header>
+
+  <h2>The shape</h2>
+  <div class="two">
+    <div>
+      <p class="cap"><b>A skill is a directory.</b> The folder name becomes the skill's name and its <code>/command</code>. Everything except <code>SKILL.md</code> is optional supporting material the skill can reach for.</p>
+      <ul class="legend">
+        <li><span class="mk">R</span><span><b>Required:</b> exactly one <code>SKILL.md</code> at the folder root.</span></li>
+        <li><span class="mk">+</span><span><b>Optional:</b> reference docs, scripts, templates, sample data. The body decides when to use them.</span></li>
+      </ul>
+    </div>
+    <pre><code>.claude/skills/
+└── summarise-changes/     the skill (folder = name)
+    ├── SKILL.md           required: metadata + body
+    ├── reference.md       optional: detail, on demand
+    └── scripts/
+        └── helper.sh      optional: code it can run</code></pre>
+  </div>
+
+  <h2>Anatomy of SKILL.md</h2>
+  <div class="two">
+    <pre><code>---                                    <span class="mk">1</span>
+name: summarise-changes                <span class="mk">2</span>
+description: Summarise uncommitted      <span class="mk">3</span>
+  changes; use when asked what changed.
+allowed-tools: Bash(git diff:*)        <span class="mk">4</span>
+---
+
+# Summarise changes                    <span class="mk">5</span>
+
+## Workflow
+1. Run `git status` and `git diff`.
+2. Group the changes by file and intent.
+3. Summarise; draft a commit if asked.
+
+See `reference.md` for the style guide. <span class="mk">6</span></code></pre>
+    <ul class="legend">
+      <li><span class="mk">1</span><span><b>Frontmatter fence.</b> YAML metadata between <code>---</code> markers. Its <code>name</code> and <code>description</code> are the part always kept in context.</span></li>
+      <li><span class="mk">2</span><span><code>name</code>: the skill's identifier and its <code>/command</code> name. Optional; the folder name is the fallback.</span></li>
+      <li><span class="mk">3</span><span><code>description</code>, <span class="star">the one that matters</span>: what it does and when to use it. Claude matches your request against this to decide whether to invoke the skill.</span></li>
+      <li><span class="mk">4</span><span><code>allowed-tools</code>: optional. Tools pre-approved while the skill runs, so it is not stopped for permission mid-task.</span></li>
+      <li><span class="mk">5</span><span><b>Body.</b> Plain Markdown: the runbook (workflow, commands, notes, examples). Loaded when the skill activates.</span></li>
+      <li><span class="mk">6</span><span><b>Pointer to a supporting file.</b> Loaded only when Claude actually follows it. This is progressive disclosure at work.</span></li>
+    </ul>
+  </div>
+
+  <section class="refs">
+
+    <div class="panel">
+      <h3>Frontmatter fields</h3>
+      <div class="ci"><code>name</code><span class="d">Identifier and <code>/command</code> name. Folder name is the fallback.</span></div>
+      <div class="ci"><code>description</code><span class="d"><span class="star">Critical.</span> What it does + when to use it. The trigger for auto-invocation.</span></div>
+      <div class="ci"><code>allowed-tools</code><span class="d">Tools pre-approved while active, e.g. <code>Bash(git diff:*)</code>.</span></div>
+      <div class="ci"><code>argument-hint</code><span class="d">Autocomplete hint, e.g. <code>[issue-number]</code>.</span></div>
+      <div class="ci"><code>more</code><span class="d">Others exist (model, effort, paths, context). See the docs.</span></div>
+    </div>
+
+    <div class="panel plain">
+      <h3>Progressive disclosure</h3>
+      <div class="rows">
+        <div class="row2"><b>Always loaded</b><br>Every skill's <code>name</code> + <code>description</code>. A few lines each, so Claude knows what exists.</div>
+        <div class="row2"><b>On activation</b><br>The full <code>SKILL.md</code> body, when the skill triggers or you invoke it.</div>
+        <div class="row2"><b>On demand</b><br>Supporting files, only when the body points Claude to them.</div>
+      </div>
+      <div class="row2" style="border-top:1px solid var(--line-soft);color:var(--muted)">Keep SKILL.md lean; push detail into supporting files that cost nothing until read.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Discovery &amp; invocation</h3>
+      <div class="rows">
+        <div class="row2"><b>Automatic</b><br>Claude reads every skill's description and invokes the one that fits your request.</div>
+        <div class="row2"><b>Manual</b><br>Type <code>/skill-name</code> (with any arguments) to run it directly.</div>
+        <div class="row2"><b>Skills vs commands</b><br>Same format. A skill is a command that lives in its own folder, can bundle files, and can auto-invoke. <code>.claude/commands/x.md</code> and <code>.claude/skills/x/SKILL.md</code> both give <code>/x</code>.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Where skills live</h3>
+      <div class="rows">
+        <div class="row2"><b>Personal</b><br><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code>. Available in all your projects.</div>
+        <div class="row2"><b>Project</b><br><code>.claude/skills/&lt;name&gt;/SKILL.md</code>. Committed, shipped with one repo.</div>
+        <div class="row2"><b>Plugin</b><br>Bundled in an installed plugin, namespaced <code>plugin:skill</code>.</div>
+      </div>
+    </div>
+
+    <div class="panel plain">
+      <h3>Write the description</h3>
+      <div class="rows">
+        <div class="row2">It is the only part always in context, so it has to earn the invocation.</div>
+        <div class="row2">Say what it does <b>and</b> when: "Search the local Dyalog docs. Use when asked about a symbol or system function."</div>
+        <div class="row2">Include the words a user would actually say. Vague ("handles code tasks") never fires.</div>
+      </div>
+    </div>
+
+    <div class="panel amber">
+      <h3>Gotchas</h3>
+      <div class="rows">
+        <div class="row2">Vague description: Claude never auto-invokes it.</div>
+        <div class="row2">Oversized SKILL.md: keep it lean, point to supporting files.</div>
+        <div class="row2">Edited a skill mid-session? Run <code>/reload-skills</code> to re-scan.</div>
+        <div class="row2">A file in <code>.claude/commands/</code> works but misses the folder and supporting-files features. Use <code>.claude/skills/&lt;name&gt;/SKILL.md</code> for the full set.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    Docs: <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">code.claude.com/docs/en/skills</a> ·
+    permissions <a href="https://code.claude.com/docs/en/permissions" target="_blank" rel="noopener">/permissions</a> ·
+    plugins <a href="https://code.claude.com/docs/en/plugins-reference" target="_blank" rel="noopener">/plugins-reference</a> ·
+    open standard <a href="https://agentskills.io" target="_blank" rel="noopener">agentskills.io</a><br>
+    Companion to the pipeline, command, and pro-tips cheat sheets.
+  </footer>
+
+</div>
