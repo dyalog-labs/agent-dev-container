@@ -58,6 +58,20 @@
   .kb code, .thesis + * code { font-family:var(--mono); }
   .lead code { font-family:var(--mono); font-size:12px; color:var(--petrol); font-weight:600; }
 
+  .modes { display:grid; grid-template-columns:max-content 1fr; gap:7px 12px; align-items:baseline; }
+  .modes .d { font-size:12.5px; color:#38424b; }
+  .modes .al { color:var(--muted); }
+  .mode { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.02em;
+          padding:2px 7px; border-radius:3px; white-space:nowrap; text-align:center; }
+  .m-safe { background:var(--green-tint); color:var(--green); }
+  .m-mid { background:var(--petrol-tint); color:var(--petrol); }
+  .m-auto { background:var(--amber-tint); color:var(--amber); }
+  .m-lock { background:var(--slate-tint); color:var(--slate); }
+  .m-danger { background:var(--red-tint); color:var(--red); }
+  .note-sm { margin-top:10px; padding-top:8px; border-top:1px solid var(--line-soft);
+             font-size:12px; color:var(--muted); line-height:1.55; }
+  .note-sm code { font-family:var(--mono); color:var(--petrol); font-weight:600; }
+
   footer { margin-top:24px; padding-top:13px; border-top:1px solid var(--line);
            font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.02em; line-height:1.6; }
   footer code { color:var(--petrol); }
@@ -149,7 +163,7 @@
 
     <div class="panel plain">
       <h2>Keyboard shortcuts</h2>
-      <div class="kb"><kbd>Shift+Tab</kbd><span class="d">Cycle permission modes: plan, accept-edits, default.</span></div>
+      <div class="kb"><kbd>Shift+Tab</kbd><span class="d">Cycle permission modes: default, accept-edits, plan, auto.</span></div>
       <div class="kb"><kbd>Esc</kbd><span class="d">Interrupt Claude, keeping work done so far.</span></div>
       <div class="kb"><kbd>Esc Esc</kbd><span class="d">Clear the input draft, or open rewind.</span></div>
       <div class="kb"><kbd>Ctrl+C</kbd><span class="d">Interrupt; press twice to exit.</span></div>
@@ -167,6 +181,19 @@
       <div class="kb"><kbd>Shift+Enter</kbd><span class="d">New line. Also <kbd>Ctrl+J</kbd> or <kbd>\</kbd> then <kbd>Enter</kbd>.</span></div>
       <div class="kb"><kbd>Alt+T</kbd><span class="d">Toggle extended thinking. <span class="al">(Option+T on macOS)</span></span></div>
       <div class="kb"><code style="font-family:var(--mono);color:var(--petrol);font-weight:600">/btw</code><span class="d">Ask a side question without touching the conversation.</span></div>
+    </div>
+
+    <div class="panel plain">
+      <h2>Permission modes</h2>
+      <div class="modes">
+        <span class="mode m-safe">default</span><span class="d">Asks before edits and commands; reads run freely. <span class="al">(edits off)</span></span>
+        <span class="mode m-mid">acceptEdits</span><span class="d">Applies edits and routine file commands without asking. <span class="al">(edits on)</span></span>
+        <span class="mode m-mid">plan</span><span class="d">Read-only; proposes a plan you approve before it edits.</span>
+        <span class="mode m-auto">auto</span><span class="d">Runs edits and commands autonomously, with background safety checks.</span>
+        <span class="mode m-lock">dontAsk</span><span class="d">Runs only pre-approved tools, plus read-only Bash.</span>
+        <span class="mode m-danger">bypassPermissions</span><span class="d">No permission checks at all. Isolated containers only. <span class="al">(permissions off)</span></span>
+      </div>
+      <p class="note-sm"><kbd>Shift+Tab</kbd> cycles the first four. <code>dontAsk</code> and <code>bypassPermissions</code> are set with <code>--permission-mode</code> at launch. <code>/sandbox</code> adds OS-level filesystem and network isolation for Bash (macOS, Linux/WSL2), independent of these modes.</p>
     </div>
 
   </section>
