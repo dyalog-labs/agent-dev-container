@@ -1,0 +1,207 @@
+<style>
+  :root {
+    --paper:#e9ecee; --card:#ffffff; --ink:#14191f; --muted:#5c6773;
+    --line:#d5dadd; --line-soft:#e6eaec;
+    --petrol:#0b6a70; --petrol-tint:#e0edee;
+    --red:#b23036; --red-tint:#f4e5e5;
+    --green:#1e7a4e; --green-tint:#e2efe8;
+    --slate:#46525e; --slate-tint:#e7eaec;
+    --amber:#9a6410; --amber-tint:#f2e9d7;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1060px; margin:0 auto; padding:34px 26px 48px; }
+
+  .mast { border-top:3px solid var(--petrol); padding-top:18px; margin-bottom:22px; }
+  .eyebrow {
+    font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--petrol); font-weight:600; margin:0 0 8px;
+  }
+  h1 {
+    font-family:var(--mono); font-weight:700; font-size:32px; line-height:1.05;
+    margin:0 0 8px; letter-spacing:-.01em; text-wrap:balance;
+  }
+  .thesis { margin:0; max-width:74ch; color:var(--muted); font-size:14.5px; }
+  .thesis code { font-family:var(--mono); font-size:12.5px; color:var(--petrol); }
+
+  .refs { display:grid; grid-template-columns:repeat(auto-fit, minmax(288px, 1fr)); gap:14px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:5px; padding:13px 15px 14px;
+           border-top:3px solid var(--pc, var(--petrol)); break-inside:avoid; }
+  .panel h2 {
+    font-family:var(--mono); font-size:12px; letter-spacing:.09em; text-transform:uppercase;
+    margin:0 0 9px; color:var(--pc, var(--petrol)); font-weight:700;
+  }
+  .panel.plain { --pc:var(--slate); }
+  .panel.amber { --pc:var(--amber); }
+
+  .ci { display:grid; grid-template-columns:minmax(84px, max-content) 1fr; gap:11px; align-items:baseline;
+        padding:4px 0; border-top:1px solid var(--line-soft); font-size:12.5px; }
+  .ci:first-child { border-top:0; }
+  .ci code { font-family:var(--mono); font-size:12px; color:var(--petrol); font-weight:600; white-space:nowrap; }
+  .ci .d { color:#38424b; }
+  .ci .al { color:var(--muted); }
+
+  .kb { display:grid; grid-template-columns:minmax(96px, max-content) 1fr; gap:11px; align-items:baseline;
+        padding:4px 0; border-top:1px solid var(--line-soft); font-size:12.5px; }
+  .kb:first-child { border-top:0; }
+  .kb .d { color:#38424b; }
+  kbd {
+    font-family:var(--mono); font-size:11px; background:#eef1f2; border:1px solid var(--line);
+    border-bottom-width:2px; border-radius:3px; padding:1px 5px; color:var(--ink); white-space:nowrap;
+  }
+  .kb code, .thesis + * code { font-family:var(--mono); }
+  .lead code { font-family:var(--mono); font-size:12px; color:var(--petrol); font-weight:600; }
+
+  .modes { display:grid; grid-template-columns:max-content 1fr; gap:7px 12px; align-items:baseline; }
+  .modes .d { font-size:12.5px; color:#38424b; }
+  .modes .al { color:var(--muted); }
+  .mode { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.02em;
+          padding:2px 7px; border-radius:3px; white-space:nowrap; text-align:center; }
+  .m-safe { background:var(--green-tint); color:var(--green); }
+  .m-mid { background:var(--petrol-tint); color:var(--petrol); }
+  .m-auto { background:var(--amber-tint); color:var(--amber); }
+  .m-lock { background:var(--slate-tint); color:var(--slate); }
+  .m-danger { background:var(--red-tint); color:var(--red); }
+  .note-sm { margin-top:10px; padding-top:8px; border-top:1px solid var(--line-soft);
+             font-size:12px; color:var(--muted); line-height:1.55; }
+  .note-sm code { font-family:var(--mono); color:var(--petrol); font-weight:600; }
+
+  footer { margin-top:24px; padding-top:13px; border-top:1px solid var(--line);
+           font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.02em; line-height:1.6; }
+  footer code { color:var(--petrol); }
+
+  h1, .panel h2 { text-wrap:balance; }
+
+  @media (max-width:560px) {
+    h1 { font-size:26px; }
+    .ci, .kb { grid-template-columns:1fr; gap:2px; }
+  }
+  @media print {
+    :root { --paper:#ffffff; }
+    body { font-size:10.4px; }
+    .wrap { max-width:none; padding:0 8px; }
+    .refs { grid-template-columns:repeat(3, 1fr); }
+    .panel { box-shadow:none; }
+    * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Claude Code · built-in command reference</p>
+    <h1>Claude Code commands</h1>
+    <p class="thesis">The commands built into Claude Code, typed with a leading <code>/</code> inside a session. Your own project and personal commands (skills) appear in the same <code>/</code> menu; commands from a connected MCP server show up as <code>/mcp__server__name</code>. Type <code>/</code> to see what is live in your session.</p>
+  </header>
+
+  <section class="refs">
+
+    <div class="panel">
+      <h2>Session &amp; context</h2>
+      <div class="ci"><code>/clear</code><span class="d">Start fresh with empty context. The old chat stays in <code style="color:var(--muted)">/resume</code>.</span></div>
+      <div class="ci"><code>/resume</code><span class="d">Reopen a past session. <span class="al">(/continue)</span></span></div>
+      <div class="ci"><code>/compact</code><span class="d">Summarise the chat to reclaim context.</span></div>
+      <div class="ci"><code>/context</code><span class="d">Show how full the context window is.</span></div>
+      <div class="ci"><code>/rewind</code><span class="d">Roll code and chat back to a checkpoint.</span></div>
+      <div class="ci"><code>/export</code><span class="d">Save the conversation to a text file.</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>Plan, models &amp; memory</h2>
+      <div class="ci"><code>/plan</code><span class="d">Enter plan mode: propose before editing. <span class="al">(or Shift+Tab)</span></span></div>
+      <div class="ci"><code>/model</code><span class="d">Switch model and set the default.</span></div>
+      <div class="ci"><code>/effort</code><span class="d">Set reasoning effort, low through max.</span></div>
+      <div class="ci"><code>/config</code><span class="d">Open settings. <span class="al">(/settings)</span></span></div>
+      <div class="ci"><code>/permissions</code><span class="d">Manage allow / ask / deny tool rules.</span></div>
+      <div class="ci"><code>/memory</code><span class="d">Edit CLAUDE.md and auto-memory.</span></div>
+      <div class="ci"><code>/init</code><span class="d">Generate a CLAUDE.md for the project.</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>Code, git &amp; review</h2>
+      <div class="ci"><code>/diff</code><span class="d">Interactive diff of uncommitted changes.</span></div>
+      <div class="ci"><code>/code-review</code><span class="d">Review your working diff for bugs. <span class="al">(--fix, --comment)</span></span></div>
+      <div class="ci"><code>/simplify</code><span class="d">Cleanup pass on the changed code.</span></div>
+      <div class="ci"><code>/review</code><span class="d">Review a GitHub pull request.</span></div>
+      <div class="ci"><code>/security-review</code><span class="d">Scan pending changes for vulnerabilities.</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>Extend &amp; connect</h2>
+      <div class="ci"><code>/agents</code><span class="d">Create and manage subagents.</span></div>
+      <div class="ci"><code>/mcp</code><span class="d">Connect and manage MCP servers.</span></div>
+      <div class="ci"><code>/hooks</code><span class="d">View hook configuration for tool events.</span></div>
+      <div class="ci"><code>/run</code><span class="d">Launch and drive your project's app.</span></div>
+      <div class="ci"><code>/verify</code><span class="d">Build and run to confirm a change works.</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>Background, automation &amp; remote</h2>
+      <div class="ci"><code>/background</code><span class="d">Detach the session as a background agent. <span class="al">(/bg)</span></span></div>
+      <div class="ci"><code>/tasks</code><span class="d">Manage background work. <span class="al">(/bashes)</span></span></div>
+      <div class="ci"><code>/loop</code><span class="d">Run a prompt on a repeating interval.</span></div>
+      <div class="ci"><code>/goal</code><span class="d">Keep working until a stated condition is met. <span class="al">(/goal clear to stop)</span></span></div>
+      <div class="ci"><code>/workflows</code><span class="d">Watch and manage running workflows.</span></div>
+      <div class="ci"><code>/remote-control</code><span class="d">Drive this session from claude.ai. <span class="al">(/rc)</span></span></div>
+    </div>
+
+    <div class="panel">
+      <h2>Account, help &amp; health</h2>
+      <div class="ci"><code>/help</code><span class="d">List the available commands.</span></div>
+      <div class="ci"><code>/usage</code><span class="d">Session cost, plan limits, activity. <span class="al">(/cost)</span></span></div>
+      <div class="ci"><code>/doctor</code><span class="d">Diagnose the installation and settings.</span></div>
+      <div class="ci"><code>/feedback</code><span class="d">Report a bug or share a session. <span class="al">(/bug)</span></span></div>
+      <div class="ci"><code>/login</code><span class="d">Sign in. <span class="al">(/logout to sign out)</span></span></div>
+      <div class="ci"><code>/exit</code><span class="d">Quit Claude Code. <span class="al">(/quit)</span></span></div>
+    </div>
+
+    <div class="panel plain">
+      <h2>Keyboard shortcuts</h2>
+      <div class="kb"><kbd>Shift+Tab</kbd><span class="d">Cycle permission modes: default, accept-edits, plan, auto.</span></div>
+      <div class="kb"><kbd>Esc</kbd><span class="d">Interrupt Claude, keeping work done so far.</span></div>
+      <div class="kb"><kbd>Esc Esc</kbd><span class="d">Clear the input draft, or open rewind.</span></div>
+      <div class="kb"><kbd>Ctrl+C</kbd><span class="d">Interrupt; press twice to exit.</span></div>
+      <div class="kb"><kbd>Ctrl+O</kbd><span class="d">Toggle the transcript viewer.</span></div>
+      <div class="kb"><kbd>Ctrl+R</kbd><span class="d">Search command history.</span></div>
+      <div class="kb"><kbd>Ctrl+V</kbd><span class="d">Paste an image from the clipboard.</span></div>
+      <div class="kb"><kbd>Up / Down</kbd><span class="d">Step through previous prompts.</span></div>
+    </div>
+
+    <div class="panel plain">
+      <h2>Input &amp; modes</h2>
+      <div class="kb"><kbd>/</kbd><span class="d">Open the command and skill picker.</span></div>
+      <div class="kb"><kbd>!</kbd><span class="d">Shell mode: run a command, add its output to the session.</span></div>
+      <div class="kb"><kbd>@</kbd><span class="d">Autocomplete a file path.</span></div>
+      <div class="kb"><kbd>Shift+Enter</kbd><span class="d">New line. Also <kbd>Ctrl+J</kbd> or <kbd>\</kbd> then <kbd>Enter</kbd>.</span></div>
+      <div class="kb"><kbd>Alt+T</kbd><span class="d">Toggle extended thinking. <span class="al">(Option+T on macOS)</span></span></div>
+      <div class="kb"><code style="font-family:var(--mono);color:var(--petrol);font-weight:600">fyi:</code><span class="d">Steer the task Claude is already running, instead of queueing a message for the next turn.</span></div>
+      <div class="kb"><code style="font-family:var(--mono);color:var(--petrol);font-weight:600">/btw</code><span class="d">Ask a side question without touching the conversation.</span></div>
+    </div>
+
+    <div class="panel plain">
+      <h2>Permission modes</h2>
+      <div class="modes">
+        <span class="mode m-safe">default</span><span class="d">Asks before edits and commands; reads run freely. <span class="al">(edits off)</span></span>
+        <span class="mode m-mid">acceptEdits</span><span class="d">Applies edits and routine file commands without asking. <span class="al">(edits on)</span></span>
+        <span class="mode m-mid">plan</span><span class="d">Read-only; proposes a plan you approve before it edits.</span>
+        <span class="mode m-auto">auto</span><span class="d">Runs edits and commands autonomously, with background safety checks.</span>
+        <span class="mode m-lock">dontAsk</span><span class="d">Runs only pre-approved tools, plus read-only Bash.</span>
+        <span class="mode m-danger">bypassPermissions</span><span class="d">No permission checks at all. Isolated containers only. <span class="al">(permissions off)</span></span>
+      </div>
+      <p class="note-sm"><kbd>Shift+Tab</kbd> cycles the first four. <code>dontAsk</code> and <code>bypassPermissions</code> are set with <code>--permission-mode</code> at launch. <code>/sandbox</code> adds OS-level filesystem and network isolation for Bash (macOS, Linux/WSL2), independent of these modes.</p>
+    </div>
+
+  </section>
+
+  <footer>
+    Availability varies by version, platform, and plan; type <code>/</code> to see what is live. Aliases shown in (parentheses).<br>
+    Full docs: code.claude.com/docs/en/commands and /interactive-mode
+  </footer>
+
+</div>

@@ -2,11 +2,13 @@
 
 The kit ships two project slash commands. Everything else in the workflow happens through ordinary conversation with Claude.
 
+For a quick reference to Claude Code's own built-in slash commands (distinct from the two project commands documented here), see [`claude-code-commands.html`](../../claude-code-commands.html) at the kit root.
+
 ## What each command does
 
 ### `/dyalog:bugfix <issue-number>`
 
-Investigates a GitHub-issue-tracked bug. Writes a verified minimal reproducer, a root-cause analysis pointing at specific files and functions, and a regression-test specification to `docs/bugs/<id>.md`. Writes no production code. The user reads the document, pushes back on guesses, and either approves the proposed fix or asks for revisions before implementation begins.
+Investigates a GitHub-issue-tracked bug. Writes failing regression tests that pin the behaviour, and a `docs/bugs/<id>.md` containing a verified minimal reproducer, a root-cause analysis pointing at specific files and functions, a fix outline, and an "Also Impacts" section covering wider implications of the root cause. Writes no production code. The regression tests are written but not committed with the bug document; they belong to the implementation cycle. The user reads the document, pushes back on guesses, and either approves the proposed fix or asks for revisions before implementation begins.
 
 For APL bugs, the command uses the `dyalog-script` skill to verify expected behaviour against a real Dyalog interpreter.
 
@@ -21,7 +23,7 @@ Stages it covers:
 | Plan / design | path argument like `docs/plans/foo.md` | Coverage, out-of-scope honesty, testability of acceptance criteria |
 | Tests-only (RED) | `docs/reviews/<id>.md` does not exist yet | Tests fail for the right reason, edge cases are covered, no implementation-detail asserts |
 | Implementation (GREEN) | `docs/reviews/<id>.md` already exists | Architectural conformity, code quality, comment hygiene, full suite passes |
-| Bug fix | `docs/bugs/<id>.md` referenced | Repro still fails on unfixed code, fix addresses root cause, regression test matches the RCA proposal |
+| Bug fix | `docs/bugs/<id>.md` referenced | Repro verified directly (reject if it cannot reproduce), fix addresses root cause not a workaround, tests demonstrate the bug and guard against regression |
 
 The command picks the stage automatically from the inputs; if it cannot tell, it asks.
 
@@ -49,7 +51,7 @@ Both commands follow three rules:
 | Path | Written by | What lives here |
 |---|---|---|
 | `docs/plans/<slug>.md` | Conversation in plan mode; saved by user request | Feature plans |
-| `docs/bugs/<id>.md` | `/dyalog:bugfix` | Bug investigations (verified repro, RCA, fix outline, regression-test spec) |
+| `docs/bugs/<id>.md` | `/dyalog:bugfix` | Bug investigations (verified repro, RCA, fix outline, Also Impacts) |
 | `docs/prs/<id>.md` | Conversation during the TDD cycle; appended each cycle | Per-cycle PR notes, the eventual PR body |
 | `docs/reviews/<id>.md` | `/dyalog:crev` | Append-only review log per issue |
 
