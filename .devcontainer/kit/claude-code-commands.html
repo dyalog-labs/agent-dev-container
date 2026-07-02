@@ -75,6 +75,9 @@
   footer { margin-top:24px; padding-top:13px; border-top:1px solid var(--line);
            font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.02em; line-height:1.6; }
   footer code { color:var(--petrol); }
+  footer a { color:var(--petrol); text-decoration:none; border-bottom:1px solid var(--petrol-tint); }
+  footer a:hover { border-bottom-color:var(--petrol); }
+  a:focus-visible { outline:2px solid var(--petrol); outline-offset:2px; }
 
   h1, .panel h2 { text-wrap:balance; }
 
@@ -201,7 +204,7 @@
 
   <footer>
     Availability varies by version, platform, and plan; type <code>/</code> to see what is live. Aliases shown in (parentheses).<br>
-    Full docs: code.claude.com/docs/en/commands and /interactive-mode
+    Full docs: <a href="https://code.claude.com/docs/en/commands" target="_blank" rel="noopener">code.claude.com/docs/en/commands</a> and <a href="https://code.claude.com/docs/en/interactive-mode" target="_blank" rel="noopener">/interactive-mode</a>
   </footer>
 
 </div>
