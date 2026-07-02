@@ -2,7 +2,7 @@
 
 This is the practical guide to taking a new feature from an idea in your head to a merged PR. It assumes you've read `CLAUDE.md` for the conventions. This document fills in what to actually do.
 
-For a one-page visual summary of the pipeline, see the cheat sheet published at https://claude.ai/code/artifact/d1f2b87b-a145-4a8a-9465-986498059639 (Dyalog access required). The same page is in the repo at `pipeline-cheatsheet.html`.
+For a one-page visual summary of the pipeline, see the cheat sheet published at https://claude.ai/code/artifact/d1f2b87b-a145-4a8a-9465-986498059639 (visible only to members of the Dyalog organisation). The same page is in the repo at `pipeline-cheatsheet.html`.
 
 The pipeline is deliberately structured. Each command does one thing, then stops for a human review. If a step feels like friction, it is usually doing its job: creating a deliberate pause for a human to look before the work moves on.
 
