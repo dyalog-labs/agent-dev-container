@@ -23,7 +23,7 @@ Clone this repository. Copy its `.devcontainer` folder into your project and ope
 git clone git@github.com:dyalog-labs/agent-dev-container.git
 mkdir my-project
 cd my-project
-cp -r ../agent-dev-container/.devcontainer
+cp -r ../agent-dev-container/.devcontainer .
 code .
 # re-open in container, wait for build, open terminal, then
 .devcontainer/install-kit-here.sh
