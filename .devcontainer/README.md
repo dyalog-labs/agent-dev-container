@@ -4,7 +4,7 @@ A multi-runtime dev container for working with Claude Code (and AI coding agents
 
 ## What's installed
 
-- Node.js 20, .NET 8, Go 1.24, Python 3 with pipx, Dyalog APL 20
+- Node.js 26, .NET 8/10, Go 1.24, Python 3 with pipx, Dyalog APL 20
 - LSP servers for TypeScript, C#, Go, Python
 - `gh` (GitHub CLI), `jq`, `fzf`, `git-delta`, zsh with oh-my-zsh
 - Claude Code CLI, pinned to auto-update

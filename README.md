@@ -12,7 +12,7 @@ A reproducible dev container and a slim Claude Code configuration for using Clau
 
 ## What's here
 
-- **`.devcontainer/`** builds a Docker image with Node 20, .NET 8, Go 1.24, Python 3, Dyalog APL 20, LSP servers for all of them, the GitHub CLI, `jq`, `git-delta`, oh-my-zsh, and the Claude Code CLI. Two named volumes preserve Claude Code's user-level config and shell history across rebuilds.
+- **`.devcontainer/`** builds a Docker image with Node 26, .NET 8, .NET 10, Go 1.24, Python 3, Dyalog APL 20, LSP servers for all of them, the GitHub CLI, `jq`, `git-delta`, oh-my-zsh, and the Claude Code CLI. Two named volumes preserve Claude Code's user-level config and shell history across rebuilds.
 - **`.devcontainer/kit/`** is the master copy of the Claude Code configuration ("the kit") that gets baked into the image at `/opt/agent-dev-container/`. It contains the project conventions (`CLAUDE.md`), the day-to-day workflow (`PROCESS.md`), and a `.claude/` tree with hooks, skills, a status line, an audit log, and two slash commands (`/dyalog:bugfix`, `/dyalog:crev`).
 
 ## Quick start
