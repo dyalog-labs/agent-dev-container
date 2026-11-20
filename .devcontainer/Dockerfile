@@ -1,4 +1,5 @@
-FROM node:20
+# trixie (Debian 13) for glibc >= 2.38, required by Dyalog 21
+FROM node:26-trixie
 
 ARG TZ
 ENV TZ="$TZ"
@@ -36,41 +37,72 @@ ENV LC_ALL=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 
 
-# --- Dyalog APL (v20) ---
-ARG DYALOG_APL_VERSION=20.0.53963
+# --- Dyalog APL ---
+# Installs the newest build listed in Dyalog's metafile for this architecture.
+# Set DYALOG_APL_VERSION (e.g. 20.0) to pin a release; the newest build of that
+# release is used. ADD re-fetches the metafile on every build and invalidates
+# the cache for this layer whenever its contents change (i.e. a new build or
+# release is published).
+ARG DYALOG_APL_VERSION=
+ADD --chmod=644 https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile /tmp/dyalog.metafile
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
-    arm64) dyalog_deb="linux_64_${DYALOG_APL_VERSION}_unicode.aarch64.deb" ;; \
-    amd64) dyalog_deb="linux_64_${DYALOG_APL_VERSION}_unicode.x86_64.deb" ;; \
+    arm64) dyalog_arch="aarch64" ;; \
+    amd64) dyalog_arch="x86_64" ;; \
     *) echo "Unsupported architecture: $arch" >&2; exit 1 ;; \
     esac; \
-    url="https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=20.0%2F${dyalog_deb}"; \
-    wget -O "/tmp/${dyalog_deb}" "$url"; \
-    dpkg -i "/tmp/${dyalog_deb}" || (apt-get update && apt-get install -y -f --no-install-recommends); \
-    rm -f "/tmp/${dyalog_deb}"; \
+    url="$(awk -F'\t' -v v="$DYALOG_APL_VERSION" -v a="$dyalog_arch" \
+        '(v == "" || $1 == v) && $2 == "deb" && $3 ~ ("_unicode\\." a "\\.deb$") { print $3 }' \
+        /tmp/dyalog.metafile | sort -V | tail -n 1)"; \
+    if [ -z "$url" ]; then \
+        echo "No Dyalog ${DYALOG_APL_VERSION:-(any version)} .deb for ${dyalog_arch} in metafile:" >&2; \
+        cat /tmp/dyalog.metafile >&2; \
+        exit 1; \
+    fi; \
+    echo "Installing Dyalog from $url"; \
+    wget -O /tmp/dyalog.deb "$url"; \
+    dpkg -i /tmp/dyalog.deb || (apt-get update && apt-get install -y -f --no-install-recommends); \
+    rm -f /tmp/dyalog.deb /tmp/dyalog.metafile; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
 
-# Install Go
-ARG GO_VERSION=1.24.1
+# --- Go ---
+# Installs the newest stable Go release listed by go.dev. Set GO_VERSION to pin
+# a release line (e.g. 1.26, newest patch of it) or an exact version (e.g.
+# 1.26.3). ADD re-fetches the release list on every build and invalidates the
+# cache for this layer whenever a new release is published.
+ARG GO_VERSION=
+ADD --chmod=644 https://go.dev/dl/?mode=json&include=all /tmp/go-releases.json
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "$arch" in \
-    arm64) goarch="arm64" ;; \
-    amd64) goarch="amd64" ;; \
+    arm64|amd64) goarch="$arch" ;; \
     *) echo "Unsupported architecture: $arch" >&2; exit 1 ;; \
     esac; \
-    wget -O /tmp/go.tar.gz "https://go.dev/dl/go${GO_VERSION}.linux-${goarch}.tar.gz"; \
+    release="$(jq -r --arg v "$GO_VERSION" --arg a "$goarch" ' \
+        .[] | select(.stable) \
+        | select($v == "" or .version == "go" + $v or (.version | startswith("go" + $v + "."))) \
+        | .files[] | select(.os == "linux" and .kind == "archive" and .arch == $a) \
+        | "\(.version) \(.filename) \(.sha256)"' \
+        /tmp/go-releases.json | sort -V | tail -n 1)"; \
+    if [ -z "$release" ]; then \
+        echo "No stable Go ${GO_VERSION:-(any version)} release for linux-${goarch} on go.dev" >&2; \
+        exit 1; \
+    fi; \
+    set -- $release; \
+    echo "Installing $1 from https://go.dev/dl/$2"; \
+    wget -O /tmp/go.tar.gz "https://go.dev/dl/$2"; \
+    echo "$3  /tmp/go.tar.gz" | sha256sum -c -; \
     tar -C /usr/local -xzf /tmp/go.tar.gz; \
-    rm /tmp/go.tar.gz
+    rm -f /tmp/go.tar.gz /tmp/go-releases.json
 
 ENV PATH=$PATH:/usr/local/go/bin
 
 # Install .NET SDK
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh \
     && chmod +x dotnet-install.sh \
-    && ./dotnet-install.sh --channel 8.0 --install-dir /usr/local/dotnet \
+    && ./dotnet-install.sh --channel 10.0 --install-dir /usr/local/dotnet \
     && rm dotnet-install.sh
 
 ENV DOTNET_ROOT=/usr/local/dotnet
@@ -133,7 +165,7 @@ ENV VISUAL=nano
 # optional, the kit only enables typescript-lsp and pyright by
 # default.
 RUN go install golang.org/x/tools/gopls@latest
-RUN dotnet tool install --global csharp-ls --version 0.16.0 \
+RUN dotnet tool install --global csharp-ls --version 0.28.0 \
     || echo "WARNING: csharp-ls install failed; C# LSP will be unavailable in this image"
 RUN npm install -g typescript typescript-language-server
 RUN pipx install python-lsp-server
@@ -147,11 +179,16 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
     -x
 
-# Install Claude Code (native install - auto-updates)
+# Install Claude Code (native install - auto-updates at runtime).
+# ADD fetches the current "latest" version string on every build; when a new
+# release ships its contents change, invalidating the cache so the RUN below
+# installs the new release instead of reusing a stale cached layer.
+ADD --chmod=644 https://downloads.claude.ai/claude-code-releases/latest /tmp/claude-code-latest-version
 RUN curl -fsSL https://claude.ai/install.sh -o /tmp/claude-install.sh \
-    && bash /tmp/claude-install.sh \
+    && bash /tmp/claude-install.sh latest \
     && rm -f /tmp/claude-install.sh \
-    && command -v claude
+    && command -v claude \
+    && echo "Expected Claude Code $(cat /tmp/claude-code-latest-version), got $(claude --version)"
 
 # Give node user sudo access
 USER root

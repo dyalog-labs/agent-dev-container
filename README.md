@@ -5,14 +5,17 @@ A reproducible dev container and a slim Claude Code configuration for using Clau
 **Version:** see [`VERSION`](VERSION). **Licence:** MIT.
 
 > [!NOTE]
-> **Dyalog version:** the Dockerfile hardcodes the latest version available, which is fragile.
-> If you see build failures, check this line in the Dockerfile:
->
-> `ARG DYALOG_APL_VERSION=20.0.ABCDE`
+> **Versions:** the image always installs the newest Dyalog APL build listed in Dyalog's
+> [docker metafile](https://www.dyalog.com/uploads/php/download.dyalog.com/download.php?file=docker.metafile),
+> the newest stable Go release from [go.dev](https://go.dev/dl/), and the latest Claude Code release.
+> A rebuild picks up new versions automatically.
+> To pin a Dyalog release, set `ARG DYALOG_APL_VERSION` in the Dockerfile (e.g. `20.0`);
+> the newest build of that release is then used. `ARG GO_VERSION` works the same way
+> (e.g. `1.26` for the newest 1.26.x, or `1.26.3` for an exact version).
 
 ## What's here
 
-- **`.devcontainer/`** builds a Docker image with Node 20, .NET 8, Go 1.24, Python 3, Dyalog APL 20, LSP servers for all of them, the GitHub CLI, `jq`, `git-delta`, oh-my-zsh, and the Claude Code CLI. Two named volumes preserve Claude Code's user-level config and shell history across rebuilds.
+- **`.devcontainer/`** builds a Docker image with Node 26, .NET 10, Go (latest), Python 3, Dyalog APL (latest, currently 21), LSP servers for all of them, the GitHub CLI, `jq`, `git-delta`, oh-my-zsh, and the Claude Code CLI. Two named volumes preserve Claude Code's user-level config and shell history across rebuilds.
 - **`.devcontainer/kit/`** is the master copy of the Claude Code configuration ("the kit") that gets baked into the image at `/opt/agent-dev-container/`. It contains the project conventions (`CLAUDE.md`), the day-to-day workflow (`PROCESS.md`), and a `.claude/` tree with hooks, skills, a status line, an audit log, and two slash commands (`/dyalog:bugfix`, `/dyalog:crev`).
 
 ## Quick start
