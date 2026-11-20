@@ -2,7 +2,7 @@
 
 All notable changes to the kit are recorded here. Versions follow [Semantic Versioning](https://semver.org/): MAJOR for breaking changes to the workflow or command contracts, MINOR for new commands or hooks, PATCH for fixes that don't change behaviour. While the kit is on `0.x`, expect breaking changes between minor versions.
 
-## [Unreleased]
+## [0.8.0] - 2026-11-20
 
 ### Changed
 
