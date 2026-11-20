@@ -4,10 +4,10 @@ A multi-runtime dev container for working with Claude Code (and AI coding agents
 
 ## What's installed
 
-- Node.js 20, .NET 8, Go 1.24, Python 3 with pipx, Dyalog APL 20
+- Node.js 26, .NET 10, Go (latest), Python 3 with pipx, Dyalog APL (latest, currently 21)
 - LSP servers for TypeScript, C#, Go, Python
 - `gh` (GitHub CLI), `jq`, `fzf`, `git-delta`, zsh with oh-my-zsh
-- Claude Code CLI, pinned to auto-update
+- Claude Code CLI, latest release at build time, auto-updating at runtime
 - The kit (`CLAUDE.md`, `PROCESS.md`, `.claude/`) baked into the image at `/opt/agent-dev-container/`
 
 ## Installing the kit into a project

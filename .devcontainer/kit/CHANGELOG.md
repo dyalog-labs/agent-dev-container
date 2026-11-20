@@ -2,6 +2,18 @@
 
 All notable changes to the kit are recorded here. Versions follow [Semantic Versioning](https://semver.org/): MAJOR for breaking changes to the workflow or command contracts, MINOR for new commands or hooks, PATCH for fixes that don't change behaviour. While the kit is on `0.x`, expect breaking changes between minor versions.
 
+## [Unreleased]
+
+### Changed
+
+- The container installs the newest Dyalog APL build (from Dyalog's docker metafile), the newest stable Go release (from go.dev), and the latest Claude Code release at build time; a new upstream release invalidates the relevant layer cache. `DYALOG_APL_VERSION` and `GO_VERSION` remain available as optional pins.
+- Base image is `node:26-trixie` (Node 26 LTS, Debian 13). Dyalog 21 requires glibc 2.38 or later, which Debian 12 does not provide.
+- .NET SDK 10 replaces .NET 8, as required by Dyalog 21. `csharp-ls` is pinned to 0.28.0, the newest release targeting .NET 10.
+
+### Fixed
+
+- The `dyalog-script` skill pipes `dyalogscript` output through `tr '\r' '\n'`. Without a terminal, `dyalogscript` ends output lines with a bare carriage return, so multi-line results collapsed onto a single line.
+
 ## [0.7.0] - 2026-06-09
 
 ### Added
